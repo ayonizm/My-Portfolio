@@ -124,7 +124,7 @@ const CpAnalysis = () => {
                 const infoData = await infoRes.json();
 
                 // Fetch Submissions for Solved Count
-                const statusRes = await fetch('https://codeforces.com/api/user.status?handle=ayon6594');
+                const statusRes = await fetch('https://codeforces.com/api/user.status?handle=ayon6594&from=1&count=50000');
                 const statusData = await statusRes.json();
 
                 if (infoData.status === 'OK' && statusData.status === 'OK') {
