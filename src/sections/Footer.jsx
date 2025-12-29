@@ -117,11 +117,11 @@ const Footer = () => {
         { icon: <AtCoderIcon />, url: 'https://atcoder.jp/users/ayonche', label: 'AtCoder', color: '#000' },
         { icon: <FacebookIcon />, url: 'https://www.facebook.com/mdanisulhaque.chowdhury.52', label: 'Facebook', color: '#1877f2' },
         { icon: <InstagramIcon />, url: 'https://www.instagram.com/ayon_chowdhury_/?hl=en', label: 'Instagram', color: '#e4405f' },
-        { icon: <WhatsappIcon />, url: 'https://wa.me/8801861073108', label: 'WhatsApp', color: '#25d366' },
+        { icon: <WhatsappIcon />, url: 'https://wa.me/8801623756808', label: 'WhatsApp', color: '#25d366' },
         { icon: <GithubIcon />, url: 'https://github.com/ayonizm', label: 'GitHub', color: '#333' },
         { icon: <LinkedinIcon />, url: 'https://www.linkedin.com/in/md-anisul-haque-chowdhury-8315a5231/', label: 'LinkedIn', color: '#0077b5' },
-        { icon: <MailIcon />, url: 'mailto:anisulhaqueayon@gmail.com', label: 'Email', color: '#ea4335' },
-        { icon: <PhoneIcon />, url: 'tel:+8801861073108', label: 'Phone', color: '#3f4a59' },
+        { icon: <MailIcon />, url: 'mailto:aayonchowdhuryy@gmail.com', label: 'Email', color: '#ea4335' },
+        { icon: <PhoneIcon />, url: 'tel:+8801623756808', label: 'Phone', color: '#3f4a59' },
     ];
 
     const currentYear = new Date().getFullYear();
@@ -188,23 +188,23 @@ const Footer = () => {
                     <div className="footer-contact">
                         <h4 style={{ marginBottom: 'var(--spacing-md)' }}>Get in Touch</h4>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-                            <a href="mailto:anisulhaqueayon@gmail.com" style={{
+                            <a href="mailto:aayonchowdhuryy@gmail.com" style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 'var(--spacing-xs)',
                                 color: 'var(--text-secondary)',
                                 textDecoration: 'none'
                             }}>
-                                <MailIcon /> anisulhaqueayon@gmail.com
+                                <MailIcon /> aayonchowdhuryy@gmail.com
                             </a>
-                            <a href="tel:+8801861073108" style={{
+                            <a href="tel:+8801623756808" style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 'var(--spacing-xs)',
                                 color: 'var(--text-secondary)',
                                 textDecoration: 'none'
                             }}>
-                                <PhoneIcon /> +880 1861 073 108
+                                <PhoneIcon /> +880 1623 756 808
                             </a>
                         </div>
                     </div>
