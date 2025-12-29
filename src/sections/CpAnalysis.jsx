@@ -71,7 +71,7 @@ const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => 
                 alignItems: 'baseline',
                 gap: '4px'
             }}>
-                {value}
+                {value ?? '...'}
                 {type === 'problems' && <span style={{ fontSize: '1rem', color: color }}>+</span>}
             </div>
 
@@ -111,8 +111,9 @@ const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => 
 };
 
 const CpAnalysis = () => {
-    const [cfStats, setCfStats] = useState({ solved: 0, rating: '...', rank: '...' });
-    const [ghStats, setGhStats] = useState({ repos: 0, desc: 'Fetching...' });
+    // Initialize with null so we can show loading '...' until data arrives or fallback triggers
+    const [cfStats, setCfStats] = useState({ solved: null, rating: '...', rank: '...' });
+    const [ghStats, setGhStats] = useState({ repos: null, desc: 'Fetching...' });
 
     useEffect(() => {
         // Fetch Codeforces Data
@@ -143,10 +144,13 @@ const CpAnalysis = () => {
                         rank: user.maxRank ? (user.maxRank.charAt(0).toUpperCase() + user.maxRank.slice(1)) : 'Unrated',
                         solved: solvedProblems.size
                     });
+                } else {
+                    throw new Error("CF API Error");
                 }
             } catch (error) {
-                console.error("Failed to fetch Codeforces data:", error);
-                setCfStats(prev => ({ ...prev, rating: 'Error', rank: 'Error' }));
+                console.error("Failed to fetch Codeforces data, using fallback:", error);
+                // Fallback to approximate known stats if API fails
+                setCfStats({ rating: '1420', rank: 'Specialist', solved: 350 });
             }
         };
 
@@ -161,10 +165,13 @@ const CpAnalysis = () => {
                         repos: data.public_repos,
                         desc: 'Public Repositories'
                     });
+                } else {
+                    throw new Error("GitHub API Error");
                 }
             } catch (error) {
-                console.error("Failed to fetch GitHub data:", error);
-                setGhStats({ repos: 'Error', desc: 'Failed to fetch' });
+                console.error("Failed to fetch GitHub data, using fallback:", error);
+                // Fallback to a realistic number as requested
+                setGhStats({ repos: 45, desc: 'Public Repositories' });
             }
         };
 
@@ -210,7 +217,7 @@ const CpAnalysis = () => {
                 <div className="grid grid-3">
                     <StatCard
                         title="Codeforces Solved"
-                        value={cfStats.solved || '...'}
+                        value={cfStats.solved}
                         icon={SiCodeforces}
                         subtext={`Max Rating: ${cfStats.rating} (${cfStats.rank})`}
                         color="#F44336" // Codeforces red
@@ -219,7 +226,7 @@ const CpAnalysis = () => {
                     />
                     <StatCard
                         title="GitHub Repos"
-                        value={ghStats.repos || '...'}
+                        value={ghStats.repos}
                         icon={SiGithub}
                         subtext={ghStats.desc}
                         color="#2dba4e" // GitHub green
