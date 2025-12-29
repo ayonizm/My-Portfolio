@@ -7,8 +7,19 @@ import { useEffect, useState } from 'react';
 const Hero = () => {
     const [hero, setHero] = useState(getHeroSync());
     const [scrollY, setScrollY] = useState(0);
+    const [cfRating, setCfRating] = useState(null);
 
     useEffect(() => {
+        // Fetch Codeforces Rating
+        fetch('https://codeforces.com/api/user.info?handles=ayon6594')
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'OK' && data.result?.length > 0) {
+                    setCfRating(data.result[0].maxRating);
+                }
+            })
+            .catch(err => console.error('Failed to fetch CF rating:', err));
+
         const handleScroll = () => setScrollY(window.scrollY);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
@@ -253,6 +264,42 @@ const Hero = () => {
                                 }}
                             />
                         </motion.div>
+
+                        {/* Codeforces Badge */}
+                        {cfRating && (
+                            <motion.a
+                                href="https://codeforces.com/profile/ayon6594"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 1, type: 'spring' }}
+                                whileHover={{ scale: 1.05 }}
+                                style={{
+                                    position: 'absolute',
+                                    bottom: '-30px',
+                                    zIndex: 10,
+                                    background: 'var(--bg-secondary)',
+                                    padding: '8px 16px',
+                                    borderRadius: '50px',
+                                    border: '1px solid var(--accent-primary)',
+                                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    textDecoration: 'none'
+                                }}
+                            >
+                                {/* Simple CF Icon SVG */}
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style={{ color: '#1f8dd6' }}>
+                                    <path d="M4.5 7.5C5.328 7.5 6 8.172 6 9v10.5c0 .828-.672 1.5-1.5 1.5h-3C.672 21 0 20.328 0 19.5V9c0-.828.672-1.5 1.5-1.5h3zm9-4.5c.828 0 1.5.672 1.5 1.5v15c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5v-15c0-.828.672-1.5 1.5-1.5h3zm9 7.5c.828 0 1.5.672 1.5 1.5v7.5c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5V12c0-.828.672-1.5 1.5-1.5h3z" />
+                                </svg>
+                                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
+                                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Max Rating</span>
+                                    <span style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--text-primary)' }}>{cfRating}</span>
+                                </div>
+                            </motion.a>
+                        )}
 
                         {/* Background glow */}
                         <div style={{
