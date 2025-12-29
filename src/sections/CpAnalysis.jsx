@@ -287,7 +287,7 @@ const CpAnalysis = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-3">
+                <div className="grid grid-4">
                     <StatCard
                         title="Codeforces Solved"
                         value={cfStats.solved}
@@ -314,6 +314,15 @@ const CpAnalysis = () => {
                         color="#000000" // AtCoder Black
                         delay={0.3}
                         type="problems"
+                    />
+                    <StatCard
+                        title="Research Papers"
+                        value="0"
+                        icon={FaScroll}
+                        subtext="Will do in future"
+                        color="#8b5cf6" // Purple
+                        delay={0.4}
+                        type="research"
                     />
                 </div>
             </div>
