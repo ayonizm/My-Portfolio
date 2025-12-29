@@ -68,9 +68,17 @@ const AdminDashboard = () => {
     };
 
     const handleDeleteProject = async (id) => {
-        if (confirm('Are you sure you want to delete this project?')) {
-            await deleteProject(id);
-            await loadData();
+        const confirmDelete = window.confirm('Are you sure you want to delete this project?');
+        if (confirmDelete) {
+            try {
+                await deleteProject(id);
+                // Refresh the projects list immediately
+                const updatedProjects = await getProjects();
+                setProjects(updatedProjects);
+            } catch (error) {
+                console.error('Error deleting project:', error);
+                alert('Failed to delete project');
+            }
         }
     };
 
@@ -86,9 +94,17 @@ const AdminDashboard = () => {
     };
 
     const handleDeleteAchievement = async (id) => {
-        if (confirm('Are you sure you want to delete this achievement?')) {
-            await deleteAchievement(id);
-            await loadData();
+        const confirmDelete = window.confirm('Are you sure you want to delete this achievement?');
+        if (confirmDelete) {
+            try {
+                await deleteAchievement(id);
+                // Refresh the achievements list immediately
+                const updatedAchievements = await getAchievements();
+                setAchievements(updatedAchievements);
+            } catch (error) {
+                console.error('Error deleting achievement:', error);
+                alert('Failed to delete achievement');
+            }
         }
     };
 
