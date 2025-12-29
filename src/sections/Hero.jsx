@@ -295,50 +295,7 @@ const Hero = () => {
                             />
                         </motion.div>
 
-                        {/* Codeforces Badge */}
-                        {cfRating && (
-                            <motion.a
-                                href="https://codeforces.com/profile/ayon6594"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{
-                                    opacity: 1,
-                                    y: [0, -10, 0]
-                                }}
-                                transition={{
-                                    opacity: { duration: 0.5, delay: 1 },
-                                    y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
-                                }}
-                                whileHover={{ scale: 1.05 }}
-                                style={{
-                                    position: 'absolute',
-                                    bottom: '-70px',
-                                    zIndex: 10,
-                                    background: getRankColor(cfRating),
-                                    padding: '10px 20px',
-                                    borderRadius: '50px',
-                                    border: '2px solid rgba(255, 255, 255, 0.2)',
-                                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '12px',
-                                    textDecoration: 'none',
-                                    backdropFilter: 'blur(4px)'
-                                }}
-                            >
-                                {/* Simple CF Icon SVG */}
-                                <svg viewBox="0 0 24 24" width="24" height="24">
-                                    <path fill="#F44336" d="M24 19.5V12a1.5 1.5 0 0 0-1.5-1.5h-3A1.5 1.5 0 0 0 18 12v7.5a1.5 1.5 0 0 0 1.5 1.5h3a1.5 1.5 0 0 0 1.5-1.5z"></path>
-                                    <path fill="#2196F3" d="M13.5 21a1.5 1.5 0 0 0 1.5-1.5v-15A1.5 1.5 0 0 0 13.5 3h-3C9.673 3 9 3.672 9 4.5v15c0 .828.673 1.5 1.5 1.5h3z"></path>
-                                    <path fill="#FFC107" d="M0 19.5c0 .828.673 1.5 1.5 1.5h3A1.5 1.5 0 0 0 6 19.5V9a1.5 1.5 0 0 0-1.5-1.5h-3C.673 7.5 0 8.172 0 9v10.5z"></path>
-                                </svg>
-                                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-                                    <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.8)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>Max Rating</span>
-                                    <span style={{ fontSize: '18px', fontWeight: 800, color: '#000000' }}>{cfRating}</span>
-                                </div>
-                            </motion.a>
-                        )}
+
 
                         {/* Background glow */}
                         <div style={{
