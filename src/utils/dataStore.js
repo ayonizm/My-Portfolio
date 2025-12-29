@@ -112,6 +112,18 @@ export const resetAllData = () => {
   console.log('All data reset to defaults');
 };
 
+// Clean duplicate IDs in localStorage
+const cleanData = () => {
+  // Projects
+  const projects = JSON.parse(localStorage.getItem(KEYS.PROJECTS) || '[]');
+  const uniqueProjects = Array.from(new Map(projects.map(p => [p.id, p])).values());
+  localStorage.setItem(KEYS.PROJECTS, JSON.stringify(uniqueProjects));
+  // Achievements
+  const achievements = JSON.parse(localStorage.getItem(KEYS.ACHIEVEMENTS) || '[]');
+  const uniqueAchievements = Array.from(new Map(achievements.map(a => [a.id, a])).values());
+  localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(uniqueAchievements));
+};
+
 // Initialize data in localStorage if not exists
 const initializeLocalData = () => {
   if (!localStorage.getItem(KEYS.PROJECTS)) {
@@ -123,6 +135,8 @@ const initializeLocalData = () => {
   if (!localStorage.getItem(KEYS.HERO)) {
     localStorage.setItem(KEYS.HERO, JSON.stringify(defaultHero));
   }
+  // Clean any duplicate IDs that might have been introduced
+  cleanData();
 };
 
 // Initialize Firebase data if empty

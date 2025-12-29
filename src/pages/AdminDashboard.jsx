@@ -72,8 +72,8 @@ const AdminDashboard = () => {
         if (confirmDelete) {
             try {
                 await deleteProject(id);
-                // Refresh the projects list immediately
-                const updatedProjects = await getProjects();
+                // Refresh the projects list immediately using sync getter
+                const updatedProjects = getProjectsSync();
                 setProjects(updatedProjects);
             } catch (error) {
                 console.error('Error deleting project:', error);
@@ -98,8 +98,8 @@ const AdminDashboard = () => {
         if (confirmDelete) {
             try {
                 await deleteAchievement(id);
-                // Refresh the achievements list immediately
-                const updatedAchievements = await getAchievements();
+                // Refresh the achievements list immediately using sync getter
+                const updatedAchievements = getAchievementsSync();
                 setAchievements(updatedAchievements);
             } catch (error) {
                 console.error('Error deleting achievement:', error);
