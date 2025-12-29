@@ -3,6 +3,61 @@ import { FiArrowDown } from 'react-icons/fi';
 import { TypewriterText, GradientText } from '../components/AnimatedText';
 import { getHeroSync, getHero } from '../utils/dataStore';
 import { useEffect, useState } from 'react';
+import React from 'react';
+
+import iconC from '../assets/c.svg';
+import iconCpp from '../assets/cpp.svg';
+import iconJava from '../assets/java.svg';
+import iconKotlin from '../assets/kotlin.svg';
+import iconPython from '../assets/python.svg';
+
+const OrbitingIcons = ({ radius = 200, duration = 30, children }) => {
+    return (
+        <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration, repeat: Infinity, ease: 'linear' }}
+            style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                pointerEvents: 'none',
+                zIndex: 1
+            }}
+        >
+            {React.Children.map(children, (child, index) => {
+                const total = React.Children.count(children);
+                const angle = (index / total) * 360;
+
+                return (
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: `rotate(${angle}deg) translate(${radius}px) rotate(-${angle}deg)`,
+                            width: '50px',
+                            height: '50px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginTop: '-25px', // Center offset
+                            marginLeft: '-25px'
+                        }}
+                    >
+                        <motion.div
+                            animate={{ rotate: -360 }}
+                            transition={{ duration, repeat: Infinity, ease: 'linear' }}
+                        >
+                            {child}
+                        </motion.div>
+                    </div>
+                );
+            })}
+        </motion.div>
+    );
+};
 
 const getRankColor = (rating) => {
     if (rating < 1200) return '#CCCCCC'; // Newbie - Gray
@@ -301,6 +356,15 @@ const Hero = () => {
                                     borderRadius: '50%'
                                 }}
                             />
+
+                            {/* Orbiting Tech Icons */}
+                            <OrbitingIcons radius={260} duration={30}>
+                                <img src={iconCpp} alt="C++" width="40" />
+                                <img src={iconJava} alt="Java" width="40" />
+                                <img src={iconPython} alt="Python" width="40" /> // using width 40 as typical icon size
+                                <img src={iconKotlin} alt="Kotlin" width="40" />
+                                <img src={iconC} alt="C" width="40" />
+                            </OrbitingIcons>
                         </motion.div>
 
 
