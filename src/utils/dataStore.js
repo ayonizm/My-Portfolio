@@ -142,6 +142,7 @@ const initializeLocalData = () => {
 // Initialize Firebase data if empty
 const initializeFirebaseData = async () => {
   try {
+    /* Auto-seeding disabled to allow empty state
     // Check if projects collection is empty
     const projectsSnap = await getDocs(collection(db, COLLECTIONS.PROJECTS));
     if (projectsSnap.empty) {
@@ -157,6 +158,7 @@ const initializeFirebaseData = async () => {
         await addDoc(collection(db, COLLECTIONS.ACHIEVEMENTS), achievement);
       }
     }
+    */
 
     // Check if hero document exists
     const heroDoc = await getDoc(doc(db, COLLECTIONS.SETTINGS, 'hero'));
@@ -449,7 +451,7 @@ export const cleanupFirebaseDuplicates = async () => {
 
     // Cleanup Achievements
     const achievementsSnap = await getDocs(collection(db, COLLECTIONS.ACHIEVEMENTS));
-    const achievements = achievementsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const achievements = achievementsSnap.docs.map(doc => ({ ...doc.data(), id: doc.id }));
     const uniqueAchievementTitles = new Set();
 
     for (const a of achievements) {
