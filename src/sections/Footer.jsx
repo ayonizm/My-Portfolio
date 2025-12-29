@@ -4,10 +4,24 @@ import {
     FiPhone,
     FiInstagram,
     FiFacebook,
-    FiHeart
+    FiHeart,
+    FiCode
 } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
-import { SiCodeforces, SiAtcoder } from 'react-icons/si';
+
+// Custom Codeforces icon
+const CodeforcesIcon = () => (
+    <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
+        <path d="M4.5 7.5C5.328 7.5 6 8.172 6 9v10.5c0 .828-.672 1.5-1.5 1.5h-3C.672 21 0 20.328 0 19.5V9c0-.828.672-1.5 1.5-1.5h3zm9-4.5c.828 0 1.5.672 1.5 1.5v15c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5v-15c0-.828.672-1.5 1.5-1.5h3zm9 7.5c.828 0 1.5.672 1.5 1.5v7.5c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5V12c0-.828.672-1.5 1.5-1.5h3z" />
+    </svg>
+);
+
+// Custom AtCoder icon (using code symbol)
+const AtCoderIcon = () => (
+    <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor">
+        <path d="M2 4v16h20V4H2zm18 14H4V6h16v12zM6 17l1.5-1.5L10 18l5-5 3 3-1.5 1.5L15 16l-5 5-3-3z" />
+    </svg>
+);
 
 const Footer = () => {
     const socialLinks = [
@@ -16,8 +30,8 @@ const Footer = () => {
         { icon: FaWhatsapp, href: 'https://wa.me/1234567890', label: 'WhatsApp' },
         { icon: FiInstagram, href: 'https://instagram.com', label: 'Instagram' },
         { icon: FiFacebook, href: 'https://facebook.com', label: 'Facebook' },
-        { icon: SiCodeforces, href: 'https://codeforces.com/profile/ayonizm', label: 'Codeforces' },
-        { icon: SiAtcoder, href: 'https://atcoder.jp/users/ayonizm', label: 'AtCoder' }
+        { icon: CodeforcesIcon, href: 'https://codeforces.com/profile/ayonizm', label: 'Codeforces' },
+        { icon: AtCoderIcon, href: 'https://atcoder.jp/users/ayonizm', label: 'AtCoder' }
     ];
 
     return (
