@@ -72,7 +72,6 @@ const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => 
                 gap: '4px'
             }}>
                 {value ?? '...'}
-                {type === 'problems' && <span style={{ fontSize: '1rem', color: color }}>+</span>}
             </div>
 
             <p style={{
@@ -134,8 +133,11 @@ const CpAnalysis = () => {
                     const solvedProblems = new Set();
                     statusData.result.forEach(submission => {
                         if (submission.verdict === 'OK') {
-                            // Create a unique key for each problem (contestId + index)
-                            solvedProblems.add(`${submission.problem.contestId}-${submission.problem.index}`);
+                            // Create a unique key: contestId-index is standard, fallback to name if contestId is missing (e.g. some gym/old problems)
+                            const key = submission.problem.contestId
+                                ? `${submission.problem.contestId}-${submission.problem.index}`
+                                : submission.problem.name;
+                            solvedProblems.add(key);
                         }
                     });
 
@@ -150,7 +152,7 @@ const CpAnalysis = () => {
             } catch (error) {
                 console.error("Failed to fetch Codeforces data, using fallback:", error);
                 // Fallback to approximate known stats if API fails
-                setCfStats({ rating: '1420', rank: 'Specialist', solved: 350 });
+                setCfStats({ rating: '1420', rank: 'Specialist', solved: 693 });
             }
         };
 
