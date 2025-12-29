@@ -186,17 +186,17 @@ const CpAnalysis = () => {
         // Fetch AtCoder Data
         const fetchAcData = async () => {
             try {
-                // Fetch User Info for Rating
-                // https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user=ayonizm
-                const infoRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user=ayonizm');
-                const infoData = await infoRes.json();
+                // Fetch User Rating via Contest History (more reliable than user_info)
+                // https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm
+                const historyRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm');
+                const historyData = await historyRes.json();
 
                 // Fetch Submissions for Solved Count
                 // https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0
                 const subRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0');
                 const subData = await subRes.json();
 
-                if (infoData && Array.isArray(subData)) {
+                if (Array.isArray(historyData) && Array.isArray(subData)) {
                     // Calculate unique ACs
                     const uniqueAc = new Set();
                     subData.forEach(sub => {
@@ -205,9 +205,13 @@ const CpAnalysis = () => {
                         }
                     });
 
-                    // Determine Rank Color/Name simply based on rating if needed, or just show rating
-                    // AtCoder Ranks: <400 Gray, <800 Brown, <1200 Green, <1600 Cyan, <2000 Blue, <2400 Yellow, <2800 Orange, Red
-                    const rating = infoData.rating || 0;
+                    // Get latest rating from history
+                    let rating = 0;
+                    if (historyData.length > 0) {
+                        rating = historyData[historyData.length - 1].NewRating;
+                    }
+
+                    // Determine Rank Color/Name
                     let rank = 'Unrated';
                     if (rating > 0) {
                         if (rating < 400) rank = 'Gray';
