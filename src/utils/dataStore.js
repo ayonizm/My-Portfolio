@@ -113,7 +113,7 @@ export const resetAllData = () => {
 };
 
 // Clean duplicate IDs in localStorage
-const cleanData = () => {
+export const cleanData = () => {
   // Projects
   const projects = JSON.parse(localStorage.getItem(KEYS.PROJECTS) || '[]');
   const uniqueProjects = Array.from(new Map(projects.map(p => [p.id, p])).values());

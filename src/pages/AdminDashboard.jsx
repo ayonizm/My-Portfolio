@@ -13,7 +13,7 @@ import {
     FiX
 } from 'react-icons/fi';
 import {
-    getProjects, getProjectsSync, addProject, updateProject, deleteProject,
+    getProjects, getProjectsSync, addProject, updateProject, deleteProject, cleanData,
     getAchievements, getAchievementsSync, addAchievement, updateAchievement, deleteAchievement,
     getHero, getHeroSync, updateHero, logout, convertToBase64
 } from '../utils/dataStore';
@@ -72,6 +72,8 @@ const AdminDashboard = () => {
         if (confirmDelete) {
             try {
                 await deleteProject(id);
+                // Clean any duplicate IDs after deletion
+                cleanData();
                 // Refresh the projects list immediately using sync getter
                 const updatedProjects = getProjectsSync();
                 setProjects(updatedProjects);
@@ -98,6 +100,8 @@ const AdminDashboard = () => {
         if (confirmDelete) {
             try {
                 await deleteAchievement(id);
+                // Clean any duplicate IDs after deletion
+                cleanData();
                 // Refresh the achievements list immediately using sync getter
                 const updatedAchievements = getAchievementsSync();
                 setAchievements(updatedAchievements);
