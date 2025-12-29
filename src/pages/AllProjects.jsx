@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FiExternalLink, FiArrowLeft } from 'react-icons/fi';
-import { getProjects, getProjectsSync } from '../utils/dataStore';
+import { getProjectsSync, subscribeToProjects } from '../utils/dataStore';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ParticleBackground from '../components/ParticleBackground';
@@ -9,7 +9,8 @@ const AllProjects = () => {
     const [projects, setProjects] = useState(getProjectsSync());
 
     useEffect(() => {
-        getProjects().then(setProjects);
+        const unsubscribe = subscribeToProjects(setProjects);
+        return () => unsubscribe();
     }, []);
 
     return (

@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { getAchievementsSync, getAchievements } from '../utils/dataStore';
+import { getAchievementsSync, subscribeToAchievements } from '../utils/dataStore';
 import { useEffect, useState } from 'react';
 
 const AchievementCard = ({ achievement, index }) => {
@@ -120,14 +120,8 @@ const Achievements = () => {
     const [achievements, setAchievements] = useState(getAchievementsSync());
 
     useEffect(() => {
-        // Load from Firebase on mount
-        getAchievements().then(setAchievements);
-
-        const interval = setInterval(() => {
-            setAchievements(getAchievementsSync());
-        }, 2000);
-
-        return () => clearInterval(interval);
+        const unsubscribe = subscribeToAchievements(setAchievements);
+        return () => unsubscribe();
     }, []);
 
     return (

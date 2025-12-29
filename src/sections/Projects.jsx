@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FiExternalLink, FiArrowRight } from 'react-icons/fi';
-import { getFeaturedProjectsSync, getFeaturedProjects } from '../utils/dataStore';
+import { getFeaturedProjectsSync, subscribeToProjects } from '../utils/dataStore';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -104,14 +104,10 @@ const Projects = () => {
     const [projects, setProjects] = useState(getFeaturedProjectsSync());
 
     useEffect(() => {
-        // Load from Firebase on mount
-        getFeaturedProjects().then(setProjects);
-
-        const interval = setInterval(() => {
-            setProjects(getFeaturedProjectsSync());
-        }, 2000);
-
-        return () => clearInterval(interval);
+        const unsubscribe = subscribeToProjects((allProjects) => {
+            setProjects(allProjects.filter(p => p.featured).slice(0, 3));
+        });
+        return () => unsubscribe();
     }, []);
 
     return (
