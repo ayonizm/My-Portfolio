@@ -174,7 +174,7 @@ export const getProjects = async () => {
   if (isFirebaseConfigured()) {
     try {
       const snapshot = await getDocs(collection(db, COLLECTIONS.PROJECTS));
-      const projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const projects = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       localStorage.setItem(KEYS.PROJECTS, JSON.stringify(projects)); // Cache locally
       return projects;
     } catch (error) {
@@ -259,7 +259,7 @@ export const getAchievements = async () => {
   if (isFirebaseConfigured()) {
     try {
       const snapshot = await getDocs(collection(db, COLLECTIONS.ACHIEVEMENTS));
-      const achievements = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const achievements = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
       return achievements;
     } catch (error) {
@@ -402,7 +402,7 @@ export const convertToBase64 = (file) => {
 export const subscribeToProjects = (callback) => {
   if (isFirebaseConfigured()) {
     return onSnapshot(collection(db, COLLECTIONS.PROJECTS), (snapshot) => {
-      const projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const projects = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       localStorage.setItem(KEYS.PROJECTS, JSON.stringify(projects));
       callback(projects);
     });
@@ -413,7 +413,7 @@ export const subscribeToProjects = (callback) => {
 export const subscribeToAchievements = (callback) => {
   if (isFirebaseConfigured()) {
     return onSnapshot(collection(db, COLLECTIONS.ACHIEVEMENTS), (snapshot) => {
-      const achievements = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const achievements = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
       callback(achievements);
     });
