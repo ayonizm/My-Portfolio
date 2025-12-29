@@ -311,12 +311,12 @@ const Hero = () => {
                                 }}
                             >
                                 {/* Simple CF Icon SVG */}
-                                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style={{ color: '#FFFFFF' }}>
-                                    <path d="M4.5 7.5C5.328 7.5 6 8.172 6 9v10.5c0 .828-.672 1.5-1.5 1.5h-3C.672 21 0 20.328 0 19.5V9c0-.828.672-1.5 1.5-1.5h3zm9-4.5c.828 0 1.5.672 1.5 1.5v15c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5v-15c0-.828.672-1.5 1.5-1.5h3zm9 7.5c.828 0 1.5.672 1.5 1.5v7.5c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5V12c0-.828.672-1.5 1.5-1.5h3z" />
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style={{ color: '#000000' }}>
+                                    <path d="M4.5 7.5C5.328 7.5 6 8.172 6 9v10.5c0 .828-.672 1.5-1.5 1.5h-3C.672 21 0 20.328 0 19.5V9c0-.828.672-1.5 1.5-1.5h3zm9-4.5c.828 0 1.5.672 1.5 1.5v15c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5v-15c0-.828.672-1.5 1.5-1.5h-3c-.828 0-1.5-.672-1.5-1.5v-15c0-.828.672-1.5 1.5-1.5h3zm9 7.5c.828 0 1.5.672 1.5 1.5v7.5c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5V12c0-.828.672-1.5 1.5-1.5h3z" />
                                 </svg>
                                 <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-                                    <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>Max Rating</span>
-                                    <span style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF' }}>{cfRating}</span>
+                                    <span style={{ fontSize: '11px', color: 'rgba(0,0,0,0.8)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>Max Rating</span>
+                                    <span style={{ fontSize: '18px', fontWeight: 800, color: '#000000' }}>{cfRating}</span>
                                 </div>
                             </motion.a>
                         )}
