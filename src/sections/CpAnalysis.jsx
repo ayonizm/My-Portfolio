@@ -185,54 +185,65 @@ const CpAnalysis = () => {
 
         // Fetch AtCoder Data
         const fetchAcData = async () => {
+            let solvedCount = 119; // Default/Fallback
+            let currentRating = 212; // Default/Fallback
+            let rank = 'Gray';
+
             try {
-                // Fetch User Rating via Contest History (more reliable than user_info)
+                // Fetch User Rating via Contest History
                 // https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm
-                const historyRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm');
-                const historyData = await historyRes.json();
+                try {
+                    const historyRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm');
+                    const historyData = await historyRes.json();
+
+                    if (Array.isArray(historyData) && historyData.length > 0) {
+                        currentRating = historyData[historyData.length - 1].NewRating;
+                    }
+                } catch (e) {
+                    console.warn("AC History fetch failed", e);
+                }
 
                 // Fetch Submissions for Solved Count
                 // https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0
-                const subRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0');
-                const subData = await subRes.json();
+                try {
+                    const subRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0');
+                    const subData = await subRes.json();
 
-                if (Array.isArray(historyData) && Array.isArray(subData)) {
-                    // Calculate unique ACs
-                    const uniqueAc = new Set();
-                    subData.forEach(sub => {
-                        if (sub.result === 'AC') {
-                            uniqueAc.add(sub.problem_id);
-                        }
-                    });
-
-                    // Get latest rating from history
-                    let rating = 0;
-                    if (historyData.length > 0) {
-                        rating = historyData[historyData.length - 1].NewRating;
+                    if (Array.isArray(subData)) {
+                        const uniqueAc = new Set();
+                        subData.forEach(sub => {
+                            if (sub.result === 'AC') {
+                                uniqueAc.add(sub.problem_id);
+                            }
+                        });
+                        solvedCount = uniqueAc.size;
                     }
-
-                    // Determine Rank Color/Name
-                    let rank = 'Unrated';
-                    if (rating > 0) {
-                        if (rating < 400) rank = 'Gray';
-                        else if (rating < 800) rank = 'Brown';
-                        else if (rating < 1200) rank = 'Green';
-                        else if (rating < 1600) rank = 'Cyan';
-                        else if (rating < 2000) rank = 'Blue';
-                        else if (rating < 2400) rank = 'Yellow';
-                        else if (rating < 2800) rank = 'Orange';
-                        else rank = 'Red';
-                    }
-
-                    setAcStats({
-                        solved: uniqueAc.size,
-                        rating: rating,
-                        rank: rank
-                    });
+                } catch (e) {
+                    console.warn("AC Submissions fetch failed", e);
                 }
+
+                // Determine Rank Color/Name
+                if (currentRating > 0) {
+                    if (currentRating < 400) rank = 'Gray';
+                    else if (currentRating < 800) rank = 'Brown';
+                    else if (currentRating < 1200) rank = 'Green';
+                    else if (currentRating < 1600) rank = 'Cyan';
+                    else if (currentRating < 2000) rank = 'Blue';
+                    else if (currentRating < 2400) rank = 'Yellow';
+                    else if (currentRating < 2800) rank = 'Orange';
+                    else rank = 'Red';
+                }
+
+                setAcStats({
+                    solved: solvedCount,
+                    rating: currentRating,
+                    rank: rank
+                });
+
             } catch (error) {
                 console.error("Failed to fetch AtCoder data:", error);
-                setAcStats({ solved: 156, rating: 426, rank: 'Gray' }); // Fallback
+                // Hard fallback if everything crashes
+                setAcStats({ solved: 119, rating: 212, rank: 'Gray' });
             }
         };
 
