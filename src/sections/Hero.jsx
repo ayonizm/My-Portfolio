@@ -272,31 +272,38 @@ const Hero = () => {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 1, type: 'spring' }}
+                                animate={{
+                                    opacity: 1,
+                                    y: [0, -10, 0]
+                                }}
+                                transition={{
+                                    opacity: { duration: 0.5, delay: 1 },
+                                    y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
+                                }}
                                 whileHover={{ scale: 1.05 }}
                                 style={{
                                     position: 'absolute',
-                                    bottom: '-30px',
+                                    bottom: '-70px',
                                     zIndex: 10,
-                                    background: 'var(--bg-secondary)',
-                                    padding: '8px 16px',
+                                    background: getRankColor(cfRating),
+                                    padding: '10px 20px',
                                     borderRadius: '50px',
-                                    border: '1px solid var(--accent-primary)',
-                                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+                                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                                    boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
                                     display: 'flex',
                                     alignItems: 'center',
-                                    gap: '8px',
-                                    textDecoration: 'none'
+                                    gap: '12px',
+                                    textDecoration: 'none',
+                                    backdropFilter: 'blur(4px)'
                                 }}
                             >
                                 {/* Simple CF Icon SVG */}
-                                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style={{ color: '#1f8dd6' }}>
+                                <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" style={{ color: '#FFFFFF' }}>
                                     <path d="M4.5 7.5C5.328 7.5 6 8.172 6 9v10.5c0 .828-.672 1.5-1.5 1.5h-3C.672 21 0 20.328 0 19.5V9c0-.828.672-1.5 1.5-1.5h3zm9-4.5c.828 0 1.5.672 1.5 1.5v15c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5v-15c0-.828.672-1.5 1.5-1.5h3zm9 7.5c.828 0 1.5.672 1.5 1.5v7.5c0 .828-.672 1.5-1.5 1.5h-3c-.828 0-1.5-.672-1.5-1.5V12c0-.828.672-1.5 1.5-1.5h3z" />
                                 </svg>
                                 <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-                                    <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Max Rating</span>
-                                    <span style={{ fontSize: '14px', fontWeight: 'bold', color: 'var(--text-primary)' }}>{cfRating}</span>
+                                    <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: 600 }}>Max Rating</span>
+                                    <span style={{ fontSize: '18px', fontWeight: 800, color: '#FFFFFF' }}>{cfRating}</span>
                                 </div>
                             </motion.a>
                         )}
