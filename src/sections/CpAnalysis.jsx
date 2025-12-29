@@ -187,13 +187,13 @@ const CpAnalysis = () => {
         const fetchAcData = async () => {
             try {
                 // Fetch User Info for Rating
-                // https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user=ayon6594
-                const infoRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user=ayon6594');
+                // https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user=ayonizm
+                const infoRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user=ayonizm');
                 const infoData = await infoRes.json();
 
                 // Fetch Submissions for Solved Count
-                // https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayon6594&from_second=0
-                const subRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayon6594&from_second=0');
+                // https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0
+                const subRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0');
                 const subData = await subRes.json();
 
                 if (infoData && Array.isArray(subData)) {
