@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiArrowDown, FiGithub, FiLinkedin } from 'react-icons/fi';
+import { FiArrowDown } from 'react-icons/fi';
 import { TypewriterText, GradientText } from '../components/AnimatedText';
 import { getHeroSync, getHero } from '../utils/dataStore';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,23 @@ const getRankColor = (rating) => {
     if (rating < 3000) return '#FF0000'; // International Grandmaster - Red
     return '#800000'; // Legendary Grandmaster - Red/Black
 };
+
+// Github Icon (Full Color)
+const GithubIcon = () => (
+    <svg viewBox="0 0 48 47" width="1em" height="1em">
+        <path fill="#3E75C3" fillRule="evenodd" d="M23.999 0C10.745 0 0 10.787 0 24.097a24.09 24.09 0 0 0 16.414 22.861c1.2.222 1.639-.522 1.639-1.16 0-.573-.021-2.088-.034-4.098-6.676 1.456-8.085-3.23-8.085-3.23-1.09-2.784-2.663-3.525-2.663-3.525-2.18-1.495.165-1.465.165-1.465 2.407.17 3.674 2.483 3.674 2.483 2.143 3.683 5.618 2.62 6.986 2.002.217-1.557.838-2.619 1.524-3.221-5.33-.609-10.932-2.675-10.932-11.908 0-2.63.934-4.781 2.47-6.466-.247-.61-1.07-3.059.235-6.377 0 0 2.015-.647 6.6 2.47 1.915-.534 3.967-.801 6.008-.811 2.039.01 4.092.277 6.01.811 4.58-3.117 6.592-2.47 6.592-2.47 1.31 3.318.486 5.767.239 6.377 1.538 1.685 2.467 3.835 2.467 6.466 0 9.256-5.611 11.293-10.957 11.89.86.744 1.629 2.213 1.629 4.462 0 3.22-.03 5.819-.03 6.61 0 .644.432 1.394 1.65 1.157C41.13 43.763 48 34.738 48 24.097 48 10.787 37.254 0 23.999 0"></path>
+    </svg>
+);
+
+// LinkedIn Icon (Full Color)
+const LinkedinIcon = () => (
+    <svg viewBox="0 0 512 512" width="1em" height="1em">
+        <g>
+            <path fill="#0A7BBA" d="M506 256.879c0 138.066-111.934 250-250 250-138.067 0-250-111.934-250-250 0-138.067 111.933-250 250-250 138.066 0 250 111.933 250 250zm0 0"></path>
+            <path fill="#F2F2F2" d="M405.36 276.985v103.076h-59.753v-96.157c0-24.153-8.617-40.647-30.269-40.647-16.493 0-26.308 11.119-30.638 21.869-1.588 3.83-1.98 9.161-1.98 14.558v100.378h-59.774s.805-162.873 0-179.734h59.774v25.478c-.108.196-.282.389-.392.585h.392v-.585c7.943-12.227 22.108-29.702 53.856-29.702 39.321 0 68.784 25.698 68.784 80.881zM160.452 113.698c-20.455 0-33.815 13.426-33.815 31.052 0 17.255 12.969 31.049 33.032 31.049h.37c20.846 0 33.815-13.793 33.815-31.049-.392-17.625-12.969-31.052-33.402-31.052zm-30.268 266.364h59.731V200.328h-59.731v179.734zm0 0"></path>
+        </g>
+    </svg>
+);
 
 const Hero = () => {
     const [hero, setHero] = useState(getHeroSync());
@@ -194,19 +211,19 @@ const Hero = () => {
                                 href="https://github.com/ayonizm"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                whileHover={{ scale: 1.2, color: '#8b5cf6' }}
+                                whileHover={{ scale: 1.2, y: -2 }}
                                 style={{ color: 'var(--text-muted)', fontSize: '1.5rem' }}
                             >
-                                <FiGithub />
+                                <GithubIcon />
                             </motion.a>
                             <motion.a
                                 href="https://www.linkedin.com/in/md-anisul-haque-chowdhury-8315a5231/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                whileHover={{ scale: 1.2, color: '#8b5cf6' }}
+                                whileHover={{ scale: 1.2, y: -2 }}
                                 style={{ color: 'var(--text-muted)', fontSize: '1.5rem' }}
                             >
-                                <FiLinkedin />
+                                <LinkedinIcon />
                             </motion.a>
                         </motion.div>
                     </div>
