@@ -127,7 +127,7 @@ const Footer = () => {
     const currentYear = new Date().getFullYear();
 
     return (
-        <footer className="footer" style={{
+        <footer id="contact" className="footer" style={{
             background: 'var(--bg-secondary)',
             padding: 'var(--spacing-2xl) 0 var(--spacing-lg)',
             borderTop: '1px solid var(--border-color)'

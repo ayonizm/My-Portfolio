@@ -190,6 +190,14 @@ const Hero = () => {
                                 View My Work
                             </motion.a>
                             <motion.a
+                                href="#cp-analysis"
+                                className="btn btn-secondary"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                            >
+                                Analysis
+                            </motion.a>
+                            <motion.a
                                 href="#contact"
                                 className="btn btn-secondary"
                                 whileHover={{ scale: 1.05 }}
