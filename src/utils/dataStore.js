@@ -38,10 +38,10 @@ const isFirebaseConfigured = () => {
   }
 };
 
-// Default data
+// Default data with unique IDs
 const defaultProjects = [
   {
-    id: '1',
+    id: 'proj_1001',
     name: 'E-Commerce Platform',
     description: 'A full-stack e-commerce solution with React, Node.js, and MongoDB. Features include user authentication, payment integration, and admin dashboard.',
     image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=400&fit=crop',
@@ -49,7 +49,7 @@ const defaultProjects = [
     featured: true
   },
   {
-    id: '2',
+    id: 'proj_1002',
     name: 'AI Chat Application',
     description: 'Real-time chat application powered by AI. Built with Next.js, WebSocket, and OpenAI API for intelligent conversations.',
     image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&h=400&fit=crop',
@@ -57,7 +57,7 @@ const defaultProjects = [
     featured: true
   },
   {
-    id: '3',
+    id: 'proj_1003',
     name: 'Portfolio Dashboard',
     description: 'A dynamic portfolio management system with analytics, project tracking, and customizable themes.',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop',
@@ -68,28 +68,28 @@ const defaultProjects = [
 
 const defaultAchievements = [
   {
-    id: '1',
+    id: 'ach_1001',
     title: 'Best Developer Award 2024',
     description: 'Recognized for outstanding contribution to open-source projects and innovative solutions.',
     icon: '🏆',
     date: '2024'
   },
   {
-    id: '2',
+    id: 'ach_1002',
     title: 'Hackathon Winner',
     description: 'First place in the National Coding Championship among 500+ participants.',
     icon: '🥇',
     date: '2023'
   },
   {
-    id: '3',
+    id: 'ach_1003',
     title: 'Tech Speaker',
     description: 'Delivered keynote presentations at major tech conferences on modern web development.',
     icon: '🎤',
     date: '2023'
   },
   {
-    id: '4',
+    id: 'ach_1004',
     title: '100+ Projects Completed',
     description: 'Successfully delivered over 100 client projects across various industries.',
     icon: '✨',
@@ -102,6 +102,14 @@ const defaultHero = {
   tagline: 'Full Stack Developer & Creative Technologist',
   description: 'I craft beautiful, high-performance web experiences that blend stunning design with cutting-edge technology. Passionate about creating digital solutions that make a difference.',
   image: '/port.jpg'
+};
+
+// Reset all data to defaults (clears corrupted data)
+export const resetAllData = () => {
+  localStorage.setItem(KEYS.PROJECTS, JSON.stringify(defaultProjects));
+  localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(defaultAchievements));
+  localStorage.setItem(KEYS.HERO, JSON.stringify(defaultHero));
+  console.log('All data reset to defaults');
 };
 
 // Initialize data in localStorage if not exists
