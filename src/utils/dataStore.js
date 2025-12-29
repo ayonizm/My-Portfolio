@@ -421,6 +421,62 @@ export const subscribeToAchievements = (callback) => {
   return () => { };
 };
 
+// Cleanup duplicate data in Firebase (same content, different IDs)
+export const cleanupFirebaseDuplicates = async () => {
+  if (!isFirebaseConfigured()) return { projects: 0, achievements: 0 };
+
+  let deletedProjects = 0;
+  let deletedAchievements = 0;
+
+  try {
+    // Cleanup Projects
+    const projectsSnap = await getDocs(collection(db, COLLECTIONS.PROJECTS));
+    const projects = projectsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const uniqueProjectNames = new Set();
+
+    for (const p of projects) {
+      const key = p.name?.toLowerCase().trim();
+      if (!key) continue;
+
+      if (uniqueProjectNames.has(key)) {
+        // Duplicate found, delete it
+        await deleteDoc(doc(db, COLLECTIONS.PROJECTS, p.id));
+        deletedProjects++;
+      } else {
+        uniqueProjectNames.add(key);
+      }
+    }
+
+    // Cleanup Achievements
+    const achievementsSnap = await getDocs(collection(db, COLLECTIONS.ACHIEVEMENTS));
+    const achievements = achievementsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const uniqueAchievementTitles = new Set();
+
+    for (const a of achievements) {
+      const key = a.title?.toLowerCase().trim();
+      if (!key) continue;
+
+      if (uniqueAchievementTitles.has(key)) {
+        // Duplicate found, delete it
+        await deleteDoc(doc(db, COLLECTIONS.ACHIEVEMENTS, a.id));
+        deletedAchievements++;
+      } else {
+        uniqueAchievementTitles.add(key);
+      }
+    }
+
+    // Force refresh local data
+    await getProjects();
+    await getAchievements();
+
+    return { projects: deletedProjects, achievements: deletedAchievements };
+
+  } catch (error) {
+    console.error('Error cleaning up duplicates:', error);
+    throw error;
+  }
+};
+
 // Initialize data
 initializeLocalData();
 if (isFirebaseConfigured()) {

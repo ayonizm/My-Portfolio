@@ -15,7 +15,7 @@ import {
 import {
     getProjects, getProjectsSync, addProject, updateProject, deleteProject, cleanData,
     getAchievements, getAchievementsSync, addAchievement, updateAchievement, deleteAchievement,
-    getHero, getHeroSync, updateHero, logout, convertToBase64
+    getHero, getHeroSync, updateHero, logout, convertToBase64, cleanupFirebaseDuplicates
 } from '../utils/dataStore';
 
 const AdminDashboard = () => {
@@ -601,11 +601,49 @@ const AdminDashboard = () => {
                                 <FiSave />
                                 Save Hero Settings
                             </motion.button>
+
+
+                            <div style={{ marginTop: 'var(--spacing-xl)', paddingTop: 'var(--spacing-lg)', borderTop: '1px solid var(--border-color)' }}>
+                                <h4 style={{ fontSize: 'var(--text-lg)', fontWeight: 600, marginBottom: 'var(--spacing-md)', color: 'var(--text-danger)' }}>
+                                    Danger Zone
+                                </h4>
+                                <p style={{ color: 'var(--text-muted)', fontSize: 'var(--text-sm)', marginBottom: 'var(--spacing-md)' }}>
+                                    If you see duplicate items or data issues, try running the cleanup tool. This will remove duplicate entries from the database.
+                                </p>
+                                <motion.button
+                                    onClick={async () => {
+                                        if (window.confirm('Are you sure? This will permanently delete duplicate entries.')) {
+                                            try {
+                                                const result = await cleanupFirebaseDuplicates();
+                                                alert(`Cleanup complete!\nRemoved ${result.projects} duplicate projects and ${result.achievements} duplicate achievements.`);
+                                                await loadData();
+                                            } catch (error) {
+                                                alert('Cleanup failed. Check console for details.');
+                                                console.error(error);
+                                            }
+                                        }
+                                    }}
+                                    className="btn"
+                                    style={{
+                                        backgroundColor: '#ef4444',
+                                        color: 'white',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px'
+                                    }}
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    <FiTrash2 />
+                                    Cleanup Duplicates
+                                </motion.button>
+                            </div>
                         </motion.div>
+
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 };
 
