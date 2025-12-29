@@ -101,7 +101,7 @@ const defaultHero = {
   name: 'Md.Anisul Haque Chowdhury',
   tagline: 'Full Stack Developer & Creative Technologist',
   description: 'I craft beautiful, high-performance web experiences that blend stunning design with cutting-edge technology. Passionate about creating digital solutions that make a difference.',
-  image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=600&fit=crop'
+  image: '/port.jpg'
 };
 
 // Initialize data in localStorage if not exists

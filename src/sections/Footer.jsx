@@ -7,6 +7,7 @@ import {
     FiHeart
 } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
+import { SiCodeforces, SiAtcoder } from 'react-icons/si';
 
 const Footer = () => {
     const socialLinks = [
@@ -14,7 +15,9 @@ const Footer = () => {
         { icon: FiPhone, href: 'tel:+1234567890', label: 'Phone' },
         { icon: FaWhatsapp, href: 'https://wa.me/1234567890', label: 'WhatsApp' },
         { icon: FiInstagram, href: 'https://instagram.com', label: 'Instagram' },
-        { icon: FiFacebook, href: 'https://facebook.com', label: 'Facebook' }
+        { icon: FiFacebook, href: 'https://facebook.com', label: 'Facebook' },
+        { icon: SiCodeforces, href: 'https://codeforces.com/profile/ayonizm', label: 'Codeforces' },
+        { icon: SiAtcoder, href: 'https://atcoder.jp/users/ayonizm', label: 'AtCoder' }
     ];
 
     return (
