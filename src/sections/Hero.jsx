@@ -4,6 +4,19 @@ import { TypewriterText, GradientText } from '../components/AnimatedText';
 import { getHeroSync, getHero } from '../utils/dataStore';
 import { useEffect, useState } from 'react';
 
+const getRankColor = (rating) => {
+    if (rating < 1200) return '#CCCCCC'; // Newbie - Gray
+    if (rating < 1400) return '#77FF77'; // Pupil - Green
+    if (rating < 1600) return '#03A89E'; // Specialist - Cyan
+    if (rating < 1900) return '#0000FF'; // Expert - Blue
+    if (rating < 2100) return '#AA00AA'; // Candidate Master - Violet
+    if (rating < 2300) return '#FF8C00'; // Master - Orange
+    if (rating < 2400) return '#FF8C00'; // International Master - Orange
+    if (rating < 2600) return '#FF0000'; // Grandmaster - Red
+    if (rating < 3000) return '#FF0000'; // International Grandmaster - Red
+    return '#800000'; // Legendary Grandmaster - Red/Black
+};
+
 const Hero = () => {
     const [hero, setHero] = useState(getHeroSync());
     const [scrollY, setScrollY] = useState(0);
