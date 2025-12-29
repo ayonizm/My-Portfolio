@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { SiCodeforces, SiGithub } from 'react-icons/si';
-import { FaScroll, FaCode, FaGitAlt } from 'react-icons/fa';
-import { IoStatsChart } from 'react-icons/io5';
+import { FaScroll } from 'react-icons/fa';
+import { useEffect, useState } from 'react';
 
 const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => {
     return (
@@ -110,91 +110,68 @@ const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => 
     );
 };
 
-// Custom Graph Component for "Creativity"
-const ActivityGraph = () => {
-    // Mock data points for a graph
-    const points = [10, 40, 30, 70, 45, 80, 55, 90, 60, 100];
-
-    return (
-        <div style={{
-            height: '200px',
-            width: '100%',
-            marginTop: 'var(--spacing-xl)',
-            position: 'relative',
-            background: 'var(--bg-glass)',
-            borderRadius: 'var(--radius-lg)',
-            padding: 'var(--spacing-md)',
-            border: '1px solid var(--border-color)',
-            overflow: 'hidden'
-        }}>
-            <h4 style={{
-                position: 'absolute',
-                top: '15px',
-                left: '20px',
-                fontSize: 'var(--text-sm)',
-                color: 'var(--text-secondary)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-            }}>
-                <IoStatsChart style={{ color: 'var(--accent-primary)' }} />
-                Activity Overview
-            </h4>
-
-            <div style={{
-                display: 'flex',
-                alignItems: 'flex-end',
-                justifyContent: 'space-between',
-                height: '100%',
-                paddingTop: '30px',
-                gap: '8px'
-            }}>
-                {points.map((p, i) => (
-                    <motion.div
-                        key={i}
-                        initial={{ height: 0 }}
-                        whileInView={{ height: `${p}%` }}
-                        transition={{ duration: 0.8, delay: i * 0.1 }}
-                        viewport={{ once: true }}
-                        style={{
-                            flex: 1,
-                            background: `linear-gradient(to top, var(--accent-primary), transparent)`,
-                            borderRadius: '4px',
-                            opacity: 0.6,
-                            position: 'relative'
-                        }}
-                    >
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            transition={{ delay: 1 + i * 0.1 }}
-                            style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                height: '2px',
-                                background: 'var(--accent-secondary)',
-                                boxShadow: '0 0 8px var(--accent-secondary)'
-                            }}
-                        />
-                    </motion.div>
-                ))}
-            </div>
-
-            {/* Grid lines */}
-            <div style={{
-                position: 'absolute',
-                top: 0, left: 0, right: 0, bottom: 0,
-                zIndex: -1,
-                backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-                backgroundSize: '20px 20px'
-            }} />
-        </div>
-    );
-};
-
 const CpAnalysis = () => {
+    const [cfStats, setCfStats] = useState({ solved: 0, rating: '...', rank: '...' });
+    const [ghStats, setGhStats] = useState({ repos: 0, desc: 'Fetching...' });
+
+    useEffect(() => {
+        // Fetch Codeforces Data
+        const fetchCfData = async () => {
+            try {
+                // Fetch User Info for Rating/Rank
+                const infoRes = await fetch('https://codeforces.com/api/user.info?handles=ayon6594');
+                const infoData = await infoRes.json();
+
+                // Fetch Submissions for Solved Count
+                const statusRes = await fetch('https://codeforces.com/api/user.status?handle=ayon6594');
+                const statusData = await statusRes.json();
+
+                if (infoData.status === 'OK' && statusData.status === 'OK') {
+                    const user = infoData.result[0];
+
+                    // Calculate unique solved problems
+                    const solvedProblems = new Set();
+                    statusData.result.forEach(submission => {
+                        if (submission.verdict === 'OK') {
+                            // Create a unique key for each problem (contestId + index)
+                            solvedProblems.add(`${submission.problem.contestId}-${submission.problem.index}`);
+                        }
+                    });
+
+                    setCfStats({
+                        rating: user.maxRating || 0,
+                        rank: user.maxRank ? (user.maxRank.charAt(0).toUpperCase() + user.maxRank.slice(1)) : 'Unrated',
+                        solved: solvedProblems.size
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to fetch Codeforces data:", error);
+                setCfStats(prev => ({ ...prev, rating: 'Error', rank: 'Error' }));
+            }
+        };
+
+        // Fetch GitHub Data
+        const fetchGhData = async () => {
+            try {
+                const res = await fetch('https://api.github.com/users/ayonizm');
+                const data = await res.json();
+
+                if (data.public_repos !== undefined) {
+                    setGhStats({
+                        repos: data.public_repos,
+                        desc: 'Public Repositories'
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to fetch GitHub data:", error);
+                setGhStats({ repos: 'Error', desc: 'Failed to fetch' });
+            }
+        };
+
+        fetchCfData();
+        fetchGhData();
+    }, []);
+
     return (
         <section className="section" id="cp-analysis">
             <div className="container">
@@ -233,18 +210,18 @@ const CpAnalysis = () => {
                 <div className="grid grid-3">
                     <StatCard
                         title="Codeforces Solved"
-                        value="350"
+                        value={cfStats.solved || '...'}
                         icon={SiCodeforces}
-                        subtext="Max Rating: 1420 (Specialist)"
+                        subtext={`Max Rating: ${cfStats.rating} (${cfStats.rank})`}
                         color="#F44336" // Codeforces red
                         delay={0.1}
                         type="problems"
                     />
                     <StatCard
-                        title="GitHub Commits"
-                        value="1,245"
+                        title="GitHub Repos"
+                        value={ghStats.repos || '...'}
                         icon={SiGithub}
-                        subtext="Contributions in last year"
+                        subtext={ghStats.desc}
                         color="#2dba4e" // GitHub green
                         delay={0.2}
                         type="commits"
@@ -259,15 +236,6 @@ const CpAnalysis = () => {
                         type="research"
                     />
                 </div>
-
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                >
-                    <ActivityGraph />
-                </motion.div>
             </div>
         </section>
     );
