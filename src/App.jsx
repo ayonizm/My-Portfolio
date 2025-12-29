@@ -4,6 +4,7 @@ import ParticleBackground from './components/ParticleBackground';
 import Hero from './sections/Hero';
 import Projects from './sections/Projects';
 import Achievements from './sections/Achievements';
+import CpAnalysis from './sections/CpAnalysis';
 import Footer from './sections/Footer';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
@@ -18,6 +19,7 @@ const HomePage = () => {
       <Hero />
       <Projects />
       <Achievements />
+      <CpAnalysis />
       <Footer />
     </main>
   );
