@@ -6,6 +6,13 @@ import { useEffect, useState } from 'react';
 
 const Hero = () => {
     const [hero, setHero] = useState(getHeroSync());
+    const [scrollY, setScrollY] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => setScrollY(window.scrollY);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         // Load from Firebase on mount
@@ -262,8 +269,8 @@ const Hero = () => {
                 {/* Scroll indicator */}
                 <motion.div
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 2 }}
+                    animate={{ opacity: scrollY > 50 ? 0 : 1 }}
+                    transition={{ duration: 0.3 }}
                     style={{
                         position: 'absolute',
                         bottom: 'var(--spacing-xl)',
