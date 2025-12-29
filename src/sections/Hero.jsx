@@ -167,7 +167,7 @@ const Hero = () => {
                             }}
                         >
                             <motion.a
-                                href="https://github.com"
+                                href="https://github.com/ayonizm"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 whileHover={{ scale: 1.2, color: '#8b5cf6' }}
@@ -176,7 +176,7 @@ const Hero = () => {
                                 <FiGithub />
                             </motion.a>
                             <motion.a
-                                href="https://linkedin.com"
+                                href="https://www.linkedin.com/in/md-anisul-haque-chowdhury-8315a5231/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 whileHover={{ scale: 1.2, color: '#8b5cf6' }}

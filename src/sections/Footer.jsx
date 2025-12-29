@@ -5,7 +5,9 @@ import {
     FiInstagram,
     FiFacebook,
     FiHeart,
-    FiCode
+    FiCode,
+    FiGithub,
+    FiLinkedin
 } from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 
@@ -25,12 +27,14 @@ const AtCoderIcon = () => (
 
 const Footer = () => {
     const socialLinks = [
-        { icon: FiMail, href: 'mailto:contact@example.com', label: 'Email' },
-        { icon: FiPhone, href: 'tel:+1234567890', label: 'Phone' },
-        { icon: FaWhatsapp, href: 'https://wa.me/1234567890', label: 'WhatsApp' },
-        { icon: FiInstagram, href: 'https://instagram.com', label: 'Instagram' },
-        { icon: FiFacebook, href: 'https://facebook.com', label: 'Facebook' },
-        { icon: CodeforcesIcon, href: 'https://codeforces.com/profile/ayonizm', label: 'Codeforces' },
+        { icon: FiMail, href: 'mailto:aayonchowdhuryy@gmail.com', label: 'Email' },
+        { icon: FiPhone, href: 'tel:+8801623756808', label: 'Phone' },
+        { icon: FaWhatsapp, href: 'https://wa.link/cv9okf', label: 'WhatsApp' },
+        { icon: FiGithub, href: 'https://github.com/ayonizm', label: 'GitHub' },
+        { icon: FiLinkedin, href: 'https://www.linkedin.com/in/md-anisul-haque-chowdhury-8315a5231/', label: 'LinkedIn' },
+        { icon: FiInstagram, href: 'https://www.instagram.com/ayonizm/', label: 'Instagram' },
+        { icon: FiFacebook, href: 'https://www.facebook.com/ayon.chowdhury.16144/', label: 'Facebook' },
+        { icon: CodeforcesIcon, href: 'https://codeforces.com/profile/ayon6594', label: 'Codeforces' },
         { icon: AtCoderIcon, href: 'https://atcoder.jp/users/ayonizm', label: 'AtCoder' }
     ];
 
