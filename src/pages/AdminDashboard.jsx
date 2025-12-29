@@ -72,8 +72,6 @@ const AdminDashboard = () => {
         if (confirmDelete) {
             try {
                 await deleteProject(id);
-                // Clean any duplicate IDs after deletion
-                cleanData();
                 // Refresh the projects list immediately using sync getter
                 const updatedProjects = getProjectsSync();
                 setProjects(updatedProjects);
@@ -100,8 +98,6 @@ const AdminDashboard = () => {
         if (confirmDelete) {
             try {
                 await deleteAchievement(id);
-                // Clean any duplicate IDs after deletion
-                cleanData();
                 // Refresh the achievements list immediately using sync getter
                 const updatedAchievements = getAchievementsSync();
                 setAchievements(updatedAchievements);
