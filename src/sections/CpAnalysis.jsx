@@ -141,10 +141,14 @@ const CpAnalysis = () => {
                         }
                     });
 
+                    // The public API only returns public submissions.
+                    // Profile count (693) - Public API count (614) = 79 private/group problems.
+                    const PRIVATE_SOLVED_OFFSET = 79;
+
                     setCfStats({
                         rating: user.maxRating || 0,
                         rank: user.maxRank ? (user.maxRank.charAt(0).toUpperCase() + user.maxRank.slice(1)) : 'Unrated',
-                        solved: solvedProblems.size
+                        solved: solvedProblems.size + PRIVATE_SOLVED_OFFSET
                     });
                 } else {
                     throw new Error("CF API Error");
