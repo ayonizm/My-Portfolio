@@ -347,7 +347,7 @@ export const updateHero = async (updates) => {
 
 // ============ AUTH ============
 
-const ADMIN_PASSWORD = 'ayon@6594';
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
 
 export const login = (password) => {
   if (password === ADMIN_PASSWORD) {
