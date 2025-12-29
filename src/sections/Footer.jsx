@@ -72,7 +72,7 @@ const Footer = () => {
                             WebkitBackgroundClip: 'text',
                             WebkitTextFillColor: 'transparent'
                         }}>
-                            Anisul Haque
+                            Ayon Chowdhury
                         </h3>
                         <p style={{
                             color: 'var(--text-muted)',
@@ -80,7 +80,7 @@ const Footer = () => {
                             lineHeight: 1.8,
                             maxWidth: '300px'
                         }}>
-                            Full Stack Developer crafting beautiful, high-performance digital experiences.
+                            Competitive Programmer | Curious About Neural Networks
                         </p>
                     </div>
 
@@ -186,7 +186,7 @@ const Footer = () => {
                         justifyContent: 'center',
                         gap: 'var(--spacing-xs)'
                     }}>
-                        © {new Date().getFullYear()} Md.Anisul Haque Chowdhury. Made with{' '}
+                        © {new Date().getFullYear()} Ayon Chowdhury. Made with{' '}
                         <motion.span
                             animate={{ scale: [1, 1.2, 1] }}
                             transition={{ duration: 1, repeat: Infinity }}
