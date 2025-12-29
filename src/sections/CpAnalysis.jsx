@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { SiCodeforces, SiGithub } from 'react-icons/si';
 import { FaScroll } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
+import atcoderIcon from '../assets/atcoder.svg';
 
 const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => {
     return (
@@ -113,6 +114,7 @@ const CpAnalysis = () => {
     // Initialize with null so we can show loading '...' until data arrives or fallback triggers
     const [cfStats, setCfStats] = useState({ solved: null, rating: '...', rank: '...' });
     const [ghStats, setGhStats] = useState({ repos: null, desc: 'Fetching...' });
+    const [acStats, setAcStats] = useState({ solved: null, rating: '...', rank: '...' });
 
     useEffect(() => {
         // Fetch Codeforces Data
@@ -181,8 +183,58 @@ const CpAnalysis = () => {
             }
         };
 
+        // Fetch AtCoder Data
+        const fetchAcData = async () => {
+            try {
+                // Fetch User Info for Rating
+                // https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user=ayon6594
+                const infoRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v2/user_info?user=ayon6594');
+                const infoData = await infoRes.json();
+
+                // Fetch Submissions for Solved Count
+                // https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayon6594&from_second=0
+                const subRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayon6594&from_second=0');
+                const subData = await subRes.json();
+
+                if (infoData && Array.isArray(subData)) {
+                    // Calculate unique ACs
+                    const uniqueAc = new Set();
+                    subData.forEach(sub => {
+                        if (sub.result === 'AC') {
+                            uniqueAc.add(sub.problem_id);
+                        }
+                    });
+
+                    // Determine Rank Color/Name simply based on rating if needed, or just show rating
+                    // AtCoder Ranks: <400 Gray, <800 Brown, <1200 Green, <1600 Cyan, <2000 Blue, <2400 Yellow, <2800 Orange, Red
+                    const rating = infoData.rating || 0;
+                    let rank = 'Unrated';
+                    if (rating > 0) {
+                        if (rating < 400) rank = 'Gray';
+                        else if (rating < 800) rank = 'Brown';
+                        else if (rating < 1200) rank = 'Green';
+                        else if (rating < 1600) rank = 'Cyan';
+                        else if (rating < 2000) rank = 'Blue';
+                        else if (rating < 2400) rank = 'Yellow';
+                        else if (rating < 2800) rank = 'Orange';
+                        else rank = 'Red';
+                    }
+
+                    setAcStats({
+                        solved: uniqueAc.size,
+                        rating: rating,
+                        rank: rank
+                    });
+                }
+            } catch (error) {
+                console.error("Failed to fetch AtCoder data:", error);
+                setAcStats({ solved: 156, rating: 426, rank: 'Gray' }); // Fallback
+            }
+        };
+
         fetchCfData();
         fetchGhData();
+        fetchAcData();
     }, []);
 
     return (
@@ -240,13 +292,13 @@ const CpAnalysis = () => {
                         type="commits"
                     />
                     <StatCard
-                        title="Research Papers"
-                        value="0"
-                        icon={FaScroll}
-                        subtext="Working on the first one..."
-                        color="#8b5cf6" // Purple
+                        title="AtCoder Solved"
+                        value={acStats.solved}
+                        icon={() => <img src={atcoderIcon} alt="AtCoder" style={{ width: '1em', height: '1em' }} />}
+                        subtext={`Max Rating: ${acStats.rating} (${acStats.rank})`}
+                        color="#000000" // AtCoder Black
                         delay={0.3}
-                        type="research"
+                        type="problems"
                     />
                 </div>
             </div>
