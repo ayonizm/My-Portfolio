@@ -361,7 +361,7 @@ const Hero = () => {
                             <OrbitingIcons radius={260} duration={30}>
                                 <img src={iconCpp} alt="C++" width="40" />
                                 <img src={iconJava} alt="Java" width="40" />
-                                <img src={iconPython} alt="Python" width="40" /> // using width 40 as typical icon size
+                                <img src={iconPython} alt="Python" width="40" />
                                 <img src={iconKotlin} alt="Kotlin" width="40" />
                                 <img src={iconC} alt="C" width="40" />
                             </OrbitingIcons>
