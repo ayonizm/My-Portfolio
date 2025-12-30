@@ -140,7 +140,11 @@ const Analysis = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="glass-card"
-                    style={{ padding: 'var(--spacing-xl)' }}
+                    style={{
+                        padding: 'var(--spacing-xl)',
+                        maxWidth: '800px',
+                        margin: '0 auto'
+                    }}
                 >
                     <h1 className="section-title" style={{ textAlign: 'left', marginBottom: 'var(--spacing-lg)' }}>
                         Detailed CP Analysis
@@ -168,9 +172,8 @@ const Analysis = () => {
                     </div>
 
                     <div style={{
-                        height: '250px',
+                        height: '350px',
                         width: '100%',
-                        maxWidth: '600px',
                         margin: '0 auto'
                     }}>
                         {loading ? (
