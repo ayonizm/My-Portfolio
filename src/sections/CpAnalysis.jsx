@@ -119,25 +119,39 @@ const CpAnalysis = () => {
     const [vjStats, setVjStats] = useState({ solved: 904, desc: 'Total Solved' }); // Default 904 as requested
 
     useEffect(() => {
-        // Fetch Codeforces Data
-        const fetchCfData = async () => {
-            try {
-                // Fetch User Info for Rating/Rank
-                const infoRes = await fetch('https://codeforces.com/api/user.info?handles=ayon6594');
-                const infoData = await infoRes.json();
+        let isMounted = true;
 
-                // Fetch Submissions for Solved Count
-                const statusRes = await fetch('https://codeforces.com/api/user.status?handle=ayon6594&from=1&count=50000');
-                const statusData = await statusRes.json();
+        const fetchData = async () => {
+            const promises = [
+                // Codeforces Rating/Rank
+                fetch('https://codeforces.com/api/user.info?handles=ayon6594').then(res => res.json()),
+                // Codeforces Submissions
+                fetch('https://codeforces.com/api/user.status?handle=ayon6594&from=1&count=50000').then(res => res.json()),
+                // AtCoder History
+                fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm').then(res => res.json()),
+                // AtCoder Submissions
+                fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0').then(res => res.json()),
+                // VJudge Data (via Proxy)
+                fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://vjudge.net/user/solveDetail/ayon6594')}`).then(res => res.json())
+            ];
+
+            const results = await Promise.allSettled(promises);
+
+            if (!isMounted) return;
+
+            // Process Codeforces
+            const cfInfoResult = results[0];
+            const cfStatusResult = results[1];
+
+            if (cfInfoResult.status === 'fulfilled' && cfStatusResult.status === 'fulfilled') {
+                const infoData = cfInfoResult.value;
+                const statusData = cfStatusResult.value;
 
                 if (infoData.status === 'OK' && statusData.status === 'OK') {
                     const user = infoData.result[0];
-
-                    // Calculate unique solved problems
                     const solvedProblems = new Set();
                     statusData.result.forEach(submission => {
                         if (submission.verdict === 'OK') {
-                            // Create a unique key: contestId-index is standard, fallback to name if contestId is missing (e.g. some gym/old problems)
                             const key = submission.problem.contestId
                                 ? `${submission.problem.contestId}-${submission.problem.index}`
                                 : submission.problem.name;
@@ -145,136 +159,71 @@ const CpAnalysis = () => {
                         }
                     });
 
-                    // The public API only returns public submissions.
-                    // Profile count (696) - Public API count = 81 private/group problems.
-                    const PRIVATE_SOLVED_OFFSET = 81;
-
+                    // Offset corrected to 79 as requested (Total 696)
+                    const PRIVATE_SOLVED_OFFSET = 79;
                     setCfStats({
                         rating: user.maxRating || 0,
                         rank: user.maxRank ? (user.maxRank.charAt(0).toUpperCase() + user.maxRank.slice(1)) : 'Unrated',
                         solved: solvedProblems.size + PRIVATE_SOLVED_OFFSET
                     });
                 } else {
-                    throw new Error("CF API Error");
+                    // Fallback
+                    setCfStats({ rating: '1420', rank: 'Specialist', solved: 696 });
                 }
-            } catch (error) {
-                console.error("Failed to fetch Codeforces data, using fallback:", error);
-                // Fallback to approximate known stats if API fails
+            } else {
                 setCfStats({ rating: '1420', rank: 'Specialist', solved: 696 });
             }
-        };
 
-        // Fetch GitHub Data
-        const fetchGhData = async () => {
-            try {
-                const res = await fetch('https://api.github.com/users/ayonizm');
-                const data = await res.json();
+            // Process AtCoder
+            const acHistoryResult = results[2];
+            const acSubResult = results[3];
+            let acRating = 212;
+            let acSolved = 119;
+            let acRank = 'Gray';
 
-                if (data.public_repos !== undefined) {
-                    setGhStats({
-                        repos: data.public_repos,
-                        desc: 'Public Repositories'
-                    });
-                } else {
-                    throw new Error("GitHub API Error");
-                }
-            } catch (error) {
-                console.error("Failed to fetch GitHub data, using fallback:", error);
-                // Fallback to the real number if API fails
-                setGhStats({ repos: 3, desc: 'Public Repositories' });
+            if (acHistoryResult.status === 'fulfilled' && Array.isArray(acHistoryResult.value) && acHistoryResult.value.length > 0) {
+                acRating = acHistoryResult.value[acHistoryResult.value.length - 1].NewRating;
             }
-        };
 
-        // Fetch AtCoder Data
-        const fetchAcData = async () => {
-            let solvedCount = 119; // Default/Fallback
-            let currentRating = 212; // Default/Fallback
-            let rank = 'Gray';
-
-            try {
-                // Fetch User Rating via Contest History
-                // https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm
-                try {
-                    const historyRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm');
-                    const historyData = await historyRes.json();
-
-                    if (Array.isArray(historyData) && historyData.length > 0) {
-                        currentRating = historyData[historyData.length - 1].NewRating;
-                    }
-                } catch (e) {
-                    console.warn("AC History fetch failed", e);
-                }
-
-                // Fetch Submissions for Solved Count
-                // https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0
-                try {
-                    const subRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0');
-                    const subData = await subRes.json();
-
-                    if (Array.isArray(subData)) {
-                        const uniqueAc = new Set();
-                        subData.forEach(sub => {
-                            if (sub.result === 'AC') {
-                                uniqueAc.add(sub.problem_id);
-                            }
-                        });
-                        solvedCount = uniqueAc.size;
-                    }
-                } catch (e) {
-                    console.warn("AC Submissions fetch failed", e);
-                }
-
-                // Determine Rank Color/Name
-                if (currentRating > 0) {
-                    if (currentRating < 400) rank = 'Gray';
-                    else if (currentRating < 800) rank = 'Brown';
-                    else if (currentRating < 1200) rank = 'Green';
-                    else if (currentRating < 1600) rank = 'Cyan';
-                    else if (currentRating < 2000) rank = 'Blue';
-                    else if (currentRating < 2400) rank = 'Yellow';
-                    else if (currentRating < 2800) rank = 'Orange';
-                    else rank = 'Red';
-                }
-
-                setAcStats({
-                    solved: solvedCount,
-                    rating: currentRating,
-                    rank: rank
+            if (acSubResult.status === 'fulfilled' && Array.isArray(acSubResult.value)) {
+                const uniqueAc = new Set();
+                acSubResult.value.forEach(sub => {
+                    if (sub.result === 'AC') uniqueAc.add(sub.problem_id);
                 });
-
-            } catch (error) {
-                console.error("Failed to fetch AtCoder data:", error);
-                // Hard fallback if everything crashes
-                setAcStats({ solved: 119, rating: 212, rank: 'Gray' });
+                acSolved = uniqueAc.size;
             }
-        };
 
-        fetchCfData();
-        // fetchGhData(); // Using static count of 3 as requested
-        fetchAcData();
+            if (acRating < 400) acRank = 'Gray';
+            else if (acRating < 800) acRank = 'Brown';
+            else if (acRating < 1200) acRank = 'Green';
+            else if (acRating < 1600) acRank = 'Cyan';
+            else if (acRating < 2000) acRank = 'Blue';
+            else if (acRating < 2400) acRank = 'Yellow';
+            else if (acRating < 2800) acRank = 'Orange';
+            else acRank = 'Red';
 
-        // Fetch VJudge Data
-        const fetchVjData = async () => {
-            try {
-                // Using allorigins as a CORS proxy to fetch the solveDetail JSON
-                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://vjudge.net/user/solveDetail/ayon6594')}`);
-                const data = await res.json();
+            setAcStats({ solved: acSolved, rating: acRating, rank: acRank });
 
-                if (data.contents) {
-                    const parsed = JSON.parse(data.contents);
-                    // counting the keys in acRecords gives the total unique AC problems
+            // Process VJudge
+            const vjResult = results[4];
+            if (vjResult.status === 'fulfilled' && vjResult.value.contents) {
+                try {
+                    const parsed = JSON.parse(vjResult.value.contents);
                     if (parsed.acRecords) {
-                        const count = Object.keys(parsed.acRecords).length;
-                        setVjStats({ solved: count, desc: 'Total Solved' });
+                        setVjStats({ solved: Object.keys(parsed.acRecords).length, desc: 'Total Solved' });
                     }
+                } catch (e) {
+                    console.warn('VJudge parse error', e);
+                    // Fallback to 904
+                    setVjStats({ solved: 904, desc: 'Total Solved' });
                 }
-            } catch (error) {
-                console.error("Failed to fetch VJudge data:", error);
-                // Fallback to 904 as requested by user
+            } else {
                 setVjStats({ solved: 904, desc: 'Total Solved' });
             }
         };
-        fetchVjData();
+
+        fetchData();
+        return () => { isMounted = false; };
     }, []);
 
     return (

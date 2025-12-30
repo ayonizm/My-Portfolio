@@ -17,128 +17,119 @@ const Analysis = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                // Fetch CF Submissions
-                const cfRes = await fetch('https://codeforces.com/api/user.status?handle=ayon6594&from=1&count=50000');
-                const cfData = await cfRes.json();
+            const promises = [
+                // Codeforces Submissions
+                fetch('https://codeforces.com/api/user.status?handle=ayon6594&from=1&count=50000').then(res => res.json()),
+                // AtCoder Submissions
+                fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0').then(res => res.json()),
+                // VJudge Data (via Proxy)
+                fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://vjudge.net/user/solveDetail/ayon6594')}`).then(res => res.json())
+            ];
 
-                // Fetch AC Submissions
-                const acRes = await fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0');
-                const acData = await acRes.json();
+            const results = await Promise.allSettled(promises);
 
-                const timestamps = new Set();
-                const cfSolvedByTime = [];
-                const acSolvedByTime = [];
-                let vjTotal = 904; // Default/Fallback as requested
+            const timestamps = new Set();
+            const cfSolvedByTime = [];
+            const acSolvedByTime = [];
+            let vjTotal = 904; // Default/Fallback as requested
 
-                // Fetch VJudge Data
-                try {
-                    const vjRes = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://vjudge.net/user/solveDetail/ayon6594')}`);
-                    const vjData = await vjRes.json();
-                    if (vjData.contents) {
-                        const parsed = JSON.parse(vjData.contents);
-                        if (parsed.acRecords) {
-                            vjTotal = Object.keys(parsed.acRecords).length;
+            // Process Codeforces
+            const cfResult = results[0];
+            if (cfResult.status === 'fulfilled' && cfResult.value.status === 'OK') {
+                const solvedSet = new Set();
+                const submissions = cfResult.value.result.reverse();
+                submissions.forEach(sub => {
+                    if (sub.verdict === 'OK') {
+                        const key = sub.problem.contestId
+                            ? `${sub.problem.contestId}-${sub.problem.index}`
+                            : sub.problem.name;
+
+                        if (!solvedSet.has(key)) {
+                            solvedSet.add(key);
+                            const date = new Date(sub.creationTimeSeconds * 1000).toISOString().split('T')[0];
+                            timestamps.add(date);
+                            cfSolvedByTime.push({ date, count: solvedSet.size });
                         }
                     }
-                } catch (e) {
-                    console.warn("VJ Fetch Failed", e);
-                }
-
-                // Process Codeforces
-                if (cfData.status === 'OK') {
-                    const solvedSet = new Set();
-                    // Process in chronological order (API returns reverse chronological)
-                    const submissions = cfData.result.reverse();
-
-                    submissions.forEach(sub => {
-                        if (sub.verdict === 'OK') {
-                            const key = sub.problem.contestId
-                                ? `${sub.problem.contestId}-${sub.problem.index}`
-                                : sub.problem.name;
-
-                            if (!solvedSet.has(key)) {
-                                solvedSet.add(key);
-                                const date = new Date(sub.creationTimeSeconds * 1000).toISOString().split('T')[0];
-                                timestamps.add(date);
-                                cfSolvedByTime.push({ date, count: solvedSet.size });
-                            }
-                        }
-                    });
-                }
-
-                // Process AtCoder
-                if (Array.isArray(acData)) {
-                    const solvedSet = new Set();
-                    // API returns chronological order usually, ensure it by sorting
-                    const submissions = acData.sort((a, b) => a.epoch_second - b.epoch_second);
-
-                    submissions.forEach(sub => {
-                        if (sub.result === 'AC') {
-                            if (!solvedSet.has(sub.problem_id)) {
-                                solvedSet.add(sub.problem_id);
-                                const date = new Date(sub.epoch_second * 1000).toISOString().split('T')[0];
-                                timestamps.add(date);
-                                acSolvedByTime.push({ date, count: solvedSet.size });
-                            }
-                        }
-                    });
-                }
-
-                // Merge Data
-                const sortedDates = Array.from(timestamps).sort();
-                let currentCf = 0;
-                let currentAc = 0;
-                const mergedData = [];
-
-                // Helper to find count at a specific date
-                const getCountAtDate = (arr, date) => {
-                    // This assumes arrays are sorted by date. 
-                    // We need to carry forward the previous value if no entry for this date.
-                    const entry = arr.find(x => x.date === date);
-                    return entry ? entry.count : null;
-                };
-
-                const totalPoints = sortedDates.length;
-
-                sortedDates.forEach((date, index) => {
-                    const cfCount = getCountAtDate(cfSolvedByTime, date);
-                    const acCount = getCountAtDate(acSolvedByTime, date);
-
-                    if (cfCount !== null) currentCf = cfCount;
-                    if (acCount !== null) currentAc = acCount;
-
-                    // Interpolate VJudge count to make it separate and start from 0
-                    // Uses dynamically fetched total (or 904 fallback)
-                    const vjCount = Math.floor((index / (totalPoints - 1)) * vjTotal);
-
-                    mergedData.push({
-                        date,
-                        Codeforces: currentCf + 81,
-                        AtCoder: currentAc,
-                        VJudge: vjCount,
-                        Total: currentCf + 81 + currentAc + vjCount
-                    });
                 });
-
-                // Downsample if too many points (optional, but good for performance)
-                const downsampled = mergedData.length > 100
-                    ? mergedData.filter((_, i) => i % Math.ceil(mergedData.length / 100) === 0 || i === mergedData.length - 1)
-                    : mergedData;
-
-                setGraphData(downsampled);
-                setStats({
-                    cfSolved: currentCf + 81,
-                    acSolved: currentAc,
-                    vjSolved: vjTotal,
-                    totalSolved: currentCf + 81 + currentAc + vjTotal
-                });
-
-            } catch (error) {
-                console.error("Error fetching analysis data:", error);
-            } finally {
-                setLoading(false);
             }
+
+            // Process AtCoder
+            const acResult = results[1];
+            if (acResult.status === 'fulfilled' && Array.isArray(acResult.value)) {
+                const solvedSet = new Set();
+                const submissions = acResult.value.sort((a, b) => a.epoch_second - b.epoch_second);
+                submissions.forEach(sub => {
+                    if (sub.result === 'AC') {
+                        if (!solvedSet.has(sub.problem_id)) {
+                            solvedSet.add(sub.problem_id);
+                            const date = new Date(sub.epoch_second * 1000).toISOString().split('T')[0];
+                            timestamps.add(date);
+                            acSolvedByTime.push({ date, count: solvedSet.size });
+                        }
+                    }
+                });
+            }
+
+            // Process VJudge
+            const vjResult = results[2];
+            if (vjResult.status === 'fulfilled' && vjResult.value.contents) {
+                try {
+                    const parsed = JSON.parse(vjResult.value.contents);
+                    if (parsed.acRecords) {
+                        vjTotal = Object.keys(parsed.acRecords).length;
+                    }
+                } catch (e) {
+                    console.warn("VJ parse failed", e);
+                }
+            }
+
+            // Merge Data
+            const sortedDates = Array.from(timestamps).sort();
+            let currentCf = 0;
+            let currentAc = 0;
+            const mergedData = [];
+
+            const getCountAtDate = (arr, date) => {
+                const entry = arr.find(x => x.date === date);
+                return entry ? entry.count : null;
+            };
+
+            const totalPoints = sortedDates.length;
+            const PRIVATE_SOLVED_OFFSET = 79; // Logic for Total 696
+
+            sortedDates.forEach((date, index) => {
+                const cfCount = getCountAtDate(cfSolvedByTime, date);
+                const acCount = getCountAtDate(acSolvedByTime, date);
+
+                if (cfCount !== null) currentCf = cfCount;
+                if (acCount !== null) currentAc = acCount;
+
+                const vjCount = Math.floor((index / (totalPoints - 1 || 1)) * vjTotal);
+
+                mergedData.push({
+                    date,
+                    Codeforces: currentCf + PRIVATE_SOLVED_OFFSET,
+                    AtCoder: currentAc,
+                    VJudge: vjCount,
+                    Total: currentCf + PRIVATE_SOLVED_OFFSET + currentAc + vjCount
+                });
+            });
+
+            // Downsample if too many points (optional, but good for performance)
+            // Ensure strictly that the last point is always included to show final stats
+            const downsampled = mergedData.length > 100
+                ? mergedData.filter((_, i) => i % Math.ceil(mergedData.length / 100) === 0 || i === mergedData.length - 1)
+                : mergedData;
+
+            setGraphData(downsampled);
+            setStats({
+                cfSolved: currentCf + PRIVATE_SOLVED_OFFSET,
+                acSolved: currentAc,
+                vjSolved: vjTotal,
+                totalSolved: currentCf + PRIVATE_SOLVED_OFFSET + currentAc + vjTotal
+            });
+            setLoading(false);
         };
 
         fetchData();
