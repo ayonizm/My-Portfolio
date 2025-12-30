@@ -84,18 +84,25 @@ const Analysis = () => {
                     return entry ? entry.count : null;
                 };
 
-                sortedDates.forEach(date => {
+                const totalPoints = sortedDates.length;
+
+                sortedDates.forEach((date, index) => {
                     const cfCount = getCountAtDate(cfSolvedByTime, date);
                     const acCount = getCountAtDate(acSolvedByTime, date);
 
                     if (cfCount !== null) currentCf = cfCount;
                     if (acCount !== null) currentAc = acCount;
 
+                    // Interpolate VJudge count to make it separate and start from 0
+                    // 901 is the total static VJudge count
+                    const vjCount = Math.floor((index / (totalPoints - 1)) * 901);
+
                     mergedData.push({
                         date,
-                        Codeforces: currentCf + 79, // Adding the private/group offset
+                        Codeforces: currentCf + 79,
                         AtCoder: currentAc,
-                        Total: currentCf + 79 + currentAc + 901 // Include static VJudge count
+                        VJudge: vjCount,
+                        Total: currentCf + 79 + currentAc + vjCount
                     });
                 });
 
@@ -109,7 +116,7 @@ const Analysis = () => {
                     cfSolved: currentCf + 79,
                     acSolved: currentAc,
                     vjSolved: 901,
-                    totalSolved: currentCf + 79 + currentAc + 901 // Adding static VJudge count
+                    totalSolved: currentCf + 79 + currentAc + 901
                 });
 
             } catch (error) {
@@ -167,13 +174,13 @@ const Analysis = () => {
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>AtCoder</h3>
-                            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#fff' }}>
+                            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#00C0C0' }}>
                                 {loading ? '...' : stats.acSolved}
                             </div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>VJudge</h3>
-                            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#fff' }}>
+                            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#5cb85c' }}>
                                 {loading ? '...' : stats.vjSolved}
                             </div>
                         </div>
@@ -225,7 +232,14 @@ const Analysis = () => {
                                     <Line
                                         type="monotone"
                                         dataKey="AtCoder"
-                                        stroke="#ffffff"
+                                        stroke="#00C0C0"
+                                        strokeWidth={2}
+                                        dot={false}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="VJudge"
+                                        stroke="#5cb85c"
                                         strokeWidth={2}
                                         dot={false}
                                     />
