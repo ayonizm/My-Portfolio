@@ -167,6 +167,9 @@ const Analysis = () => {
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>AtCoder</h3>
+                            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#fff' }}>
+                                {loading ? '...' : stats.acSolved}
+                            </div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>VJudge</h3>
