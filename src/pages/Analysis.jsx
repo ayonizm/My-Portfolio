@@ -168,9 +168,9 @@ const Analysis = () => {
                     </div>
 
                     <div style={{
-                        height: '350px',
+                        height: '250px',
                         width: '100%',
-                        maxWidth: '800px',
+                        maxWidth: '600px',
                         margin: '0 auto'
                     }}>
                         {loading ? (
