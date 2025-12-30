@@ -113,7 +113,7 @@ const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => 
 const CpAnalysis = () => {
     // Initialize with null so we can show loading '...' until data arrives or fallback triggers
     const [cfStats, setCfStats] = useState({ solved: null, rating: '...', rank: '...' });
-    const [ghStats, setGhStats] = useState({ repos: null, desc: 'Fetching...' });
+    const [ghStats, setGhStats] = useState({ repos: 3, desc: 'Public Repositories' });
     const [acStats, setAcStats] = useState({ solved: null, rating: '...', rank: '...' });
 
     useEffect(() => {
@@ -248,7 +248,7 @@ const CpAnalysis = () => {
         };
 
         fetchCfData();
-        fetchGhData();
+        // fetchGhData(); // Using static count of 3 as requested
         fetchAcData();
     }, []);
 
