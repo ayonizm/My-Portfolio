@@ -110,11 +110,19 @@ const WhatsappIcon = () => (
     </svg>
 );
 
+const VJudgeIcon = () => (
+    <svg viewBox="0 0 512 512" width="1em" height="1em">
+        <path fill="#e0e0e0" d="M0 0h512v512H0z" opacity="0" />
+        <path fill="#ffffff" d="M74.8 128l57.6 256h64l-57.6-256H74.8zM224 128l128 256 128-256h-64L352 291.2 288 128H224z" />
+    </svg>
+);
+
 
 const Footer = () => {
     const socialLinks = [
         { icon: <CodeforcesIcon />, url: 'https://codeforces.com/profile/ayon6594', label: 'Codeforces', color: '#1f8dd6' },
         { icon: <AtCoderIcon />, url: 'https://atcoder.jp/users/ayonche', label: 'AtCoder', color: '#000' },
+        { icon: <VJudgeIcon />, url: 'https://vjudge.net/user/ayonizm', label: 'VJudge', color: '#fff' },
         { icon: <FacebookIcon />, url: 'https://www.facebook.com/mdanisulhaque.chowdhury.52', label: 'Facebook', color: '#1877f2' },
         { icon: <InstagramIcon />, url: 'https://www.instagram.com/ayon_chowdhury_/?hl=en', label: 'Instagram', color: '#e4405f' },
         { icon: <WhatsappIcon />, url: 'https://wa.me/8801623756808', label: 'WhatsApp', color: '#25d366' },

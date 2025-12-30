@@ -11,6 +11,7 @@ const Analysis = () => {
     const [stats, setStats] = useState({
         cfSolved: 0,
         acSolved: 0,
+        vjSolved: 901, // Static
         totalSolved: 0
     });
 
@@ -107,7 +108,8 @@ const Analysis = () => {
                 setStats({
                     cfSolved: currentCf + 79,
                     acSolved: currentAc,
-                    totalSolved: currentCf + 79 + currentAc
+                    vjSolved: 901,
+                    totalSolved: currentCf + 79 + currentAc + 901 // Adding static VJudge count
                 });
 
             } catch (error) {
@@ -150,7 +152,7 @@ const Analysis = () => {
                         Detailed CP Analysis
                     </h1>
 
-                    <div className="grid grid-3" style={{ marginBottom: 'var(--spacing-xl)' }}>
+                    <div className="grid grid-4" style={{ marginBottom: 'var(--spacing-xl)' }}>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>Total Solved</h3>
                             <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--accent-primary)' }}>
@@ -165,8 +167,11 @@ const Analysis = () => {
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>AtCoder</h3>
+                        </div>
+                        <div style={{ textAlign: 'center' }}>
+                            <h3 style={{ color: 'var(--text-muted)' }}>VJudge</h3>
                             <div style={{ fontSize: '2rem', fontWeight: 700, color: '#fff' }}>
-                                {loading ? '...' : stats.acSolved}
+                                {loading ? '...' : stats.vjSolved}
                             </div>
                         </div>
                     </div>

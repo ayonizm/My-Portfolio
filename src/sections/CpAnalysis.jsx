@@ -3,6 +3,7 @@ import { SiCodeforces, SiGithub } from 'react-icons/si';
 import { FaScroll } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import atcoderIcon from '../assets/atcoder.svg';
+import vjudgeIcon from '../assets/vjudge.svg';
 
 const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => {
     return (
@@ -115,6 +116,7 @@ const CpAnalysis = () => {
     const [cfStats, setCfStats] = useState({ solved: null, rating: '...', rank: '...' });
     const [ghStats, setGhStats] = useState({ repos: 3, desc: 'Public Repositories' });
     const [acStats, setAcStats] = useState({ solved: null, rating: '...', rank: '...' });
+    const [vjStats] = useState({ solved: 901, desc: 'Total Solved' }); // Static count as requested
 
     useEffect(() => {
         // Fetch Codeforces Data
@@ -287,7 +289,7 @@ const CpAnalysis = () => {
                     </p>
                 </motion.div>
 
-                <div className="grid grid-4">
+                <div className="grid grid-3" style={{ justifyContent: 'center' }}>
                     <StatCard
                         title="Codeforces Solved"
                         value={cfStats.solved}
@@ -310,9 +312,17 @@ const CpAnalysis = () => {
                         title="AtCoder Solved"
                         value={acStats.solved}
                         icon={() => <img src={atcoderIcon} alt="AtCoder" style={{ width: '1em', height: '1em' }} />}
-                        subtext={`Max Rating: ${acStats.rating} (${acStats.rank})`}
                         color="#000000" // AtCoder Black
                         delay={0.3}
+                        type="problems"
+                    />
+                    <StatCard
+                        title="VJudge Solved"
+                        value={vjStats.solved}
+                        icon={() => <img src={vjudgeIcon} alt="VJudge" style={{ width: '1em', height: '1em' }} />}
+                        subtext={vjStats.desc}
+                        color="#ffffff" // White/VJudge color
+                        delay={0.35}
                         type="problems"
                     />
                     <StatCard
