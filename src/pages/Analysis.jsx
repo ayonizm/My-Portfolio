@@ -99,10 +99,10 @@ const Analysis = () => {
 
                     mergedData.push({
                         date,
-                        Codeforces: currentCf + 79,
+                        Codeforces: currentCf + 81,
                         AtCoder: currentAc,
                         VJudge: vjCount,
-                        Total: currentCf + 79 + currentAc + vjCount
+                        Total: currentCf + 81 + currentAc + vjCount
                     });
                 });
 
@@ -113,10 +113,10 @@ const Analysis = () => {
 
                 setGraphData(downsampled);
                 setStats({
-                    cfSolved: currentCf + 79,
+                    cfSolved: currentCf + 81,
                     acSolved: currentAc,
                     vjSolved: 901,
-                    totalSolved: currentCf + 79 + currentAc + 901
+                    totalSolved: currentCf + 81 + currentAc + 901
                 });
 
             } catch (error) {
