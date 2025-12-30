@@ -95,7 +95,7 @@ const Analysis = () => {
                         date,
                         Codeforces: currentCf + 79, // Adding the private/group offset
                         AtCoder: currentAc,
-                        Total: currentCf + 79 + currentAc
+                        Total: currentCf + 79 + currentAc + 901 // Include static VJudge count
                     });
                 });
 
