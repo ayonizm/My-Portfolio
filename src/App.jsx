@@ -10,6 +10,7 @@ import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import AllProjects from './pages/AllProjects';
 import ProtectedRoute from './components/ProtectedRoute';
+import Analysis from './pages/Analysis';
 import './index.css';
 
 const HomePage = () => {
@@ -31,6 +32,7 @@ function App() {
       <AnimatedCursor />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/analysis" element={<Analysis />} />
         <Route path="/projects" element={<AllProjects />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route

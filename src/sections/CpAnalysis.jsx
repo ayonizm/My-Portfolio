@@ -325,6 +325,25 @@ const CpAnalysis = () => {
                         type="research"
                     />
                 </div>
+
+                <div style={{
+                    marginTop: 'var(--spacing-2xl)',
+                    display: 'flex',
+                    justifyContent: 'center'
+                }}>
+                    <motion.a
+                        href="/analysis"
+                        className="btn btn-primary"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                    >
+                        View Detailed Analysis
+                    </motion.a>
+                </div>
             </div>
         </section>
     );
