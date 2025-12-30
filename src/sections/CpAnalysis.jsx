@@ -116,7 +116,7 @@ const CpAnalysis = () => {
     const [cfStats, setCfStats] = useState({ solved: null, rating: '...', rank: '...' });
     const [ghStats, setGhStats] = useState({ repos: 3, desc: 'Public Repositories' });
     const [acStats, setAcStats] = useState({ solved: null, rating: '...', rank: '...' });
-    const [vjStats] = useState({ solved: 901, desc: 'Total Solved' }); // Static count as requested
+    const [vjStats, setVjStats] = useState({ solved: 904, desc: 'Total Solved' }); // Default 904 as requested
 
     useEffect(() => {
         // Fetch Codeforces Data
@@ -252,6 +252,29 @@ const CpAnalysis = () => {
         fetchCfData();
         // fetchGhData(); // Using static count of 3 as requested
         fetchAcData();
+
+        // Fetch VJudge Data
+        const fetchVjData = async () => {
+            try {
+                // Using allorigins as a CORS proxy to fetch the solveDetail JSON
+                const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://vjudge.net/user/solveDetail/ayon6594')}`);
+                const data = await res.json();
+
+                if (data.contents) {
+                    const parsed = JSON.parse(data.contents);
+                    // counting the keys in acRecords gives the total unique AC problems
+                    if (parsed.acRecords) {
+                        const count = Object.keys(parsed.acRecords).length;
+                        setVjStats({ solved: count, desc: 'Total Solved' });
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch VJudge data:", error);
+                // Fallback to 904 as requested by user
+                setVjStats({ solved: 904, desc: 'Total Solved' });
+            }
+        };
+        fetchVjData();
     }, []);
 
     return (

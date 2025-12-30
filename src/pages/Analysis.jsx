@@ -11,7 +11,7 @@ const Analysis = () => {
     const [stats, setStats] = useState({
         cfSolved: 0,
         acSolved: 0,
-        vjSolved: 901, // Static
+        vjSolved: 904, // Default 904
         totalSolved: 0
     });
 
@@ -29,6 +29,21 @@ const Analysis = () => {
                 const timestamps = new Set();
                 const cfSolvedByTime = [];
                 const acSolvedByTime = [];
+                let vjTotal = 904; // Default/Fallback as requested
+
+                // Fetch VJudge Data
+                try {
+                    const vjRes = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent('https://vjudge.net/user/solveDetail/ayon6594')}`);
+                    const vjData = await vjRes.json();
+                    if (vjData.contents) {
+                        const parsed = JSON.parse(vjData.contents);
+                        if (parsed.acRecords) {
+                            vjTotal = Object.keys(parsed.acRecords).length;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("VJ Fetch Failed", e);
+                }
 
                 // Process Codeforces
                 if (cfData.status === 'OK') {
@@ -94,8 +109,8 @@ const Analysis = () => {
                     if (acCount !== null) currentAc = acCount;
 
                     // Interpolate VJudge count to make it separate and start from 0
-                    // 901 is the total static VJudge count
-                    const vjCount = Math.floor((index / (totalPoints - 1)) * 901);
+                    // Uses dynamically fetched total (or 904 fallback)
+                    const vjCount = Math.floor((index / (totalPoints - 1)) * vjTotal);
 
                     mergedData.push({
                         date,
@@ -115,8 +130,8 @@ const Analysis = () => {
                 setStats({
                     cfSolved: currentCf + 81,
                     acSolved: currentAc,
-                    vjSolved: 901,
-                    totalSolved: currentCf + 81 + currentAc + 901
+                    vjSolved: vjTotal,
+                    totalSolved: currentCf + 81 + currentAc + vjTotal
                 });
 
             } catch (error) {
