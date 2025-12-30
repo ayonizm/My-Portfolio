@@ -146,8 +146,8 @@ const CpAnalysis = () => {
                     });
 
                     // The public API only returns public submissions.
-                    // Profile count (693) - Public API count (614) = 79 private/group problems.
-                    const PRIVATE_SOLVED_OFFSET = 79;
+                    // Profile count (696) - Public API count = 81 private/group problems.
+                    const PRIVATE_SOLVED_OFFSET = 81;
 
                     setCfStats({
                         rating: user.maxRating || 0,
@@ -160,7 +160,7 @@ const CpAnalysis = () => {
             } catch (error) {
                 console.error("Failed to fetch Codeforces data, using fallback:", error);
                 // Fallback to approximate known stats if API fails
-                setCfStats({ rating: '1420', rank: 'Specialist', solved: 693 });
+                setCfStats({ rating: '1420', rank: 'Specialist', solved: 696 });
             }
         };
 
