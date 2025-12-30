@@ -176,10 +176,8 @@ const CpAnalysis = () => {
                 } else {
                     throw new Error("GitHub API Error");
                 }
-            } catch (error) {
-                console.error("Failed to fetch GitHub data, using fallback:", error);
-                // Fallback to a realistic number as requested
-                setGhStats({ repos: 45, desc: 'Public Repositories' });
+                // Fallback to the real number if API fails
+                setGhStats({ repos: 3, desc: 'Public Repositories' });
             }
         };
 
