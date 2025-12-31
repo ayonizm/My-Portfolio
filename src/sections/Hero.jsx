@@ -2,7 +2,6 @@ import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { FiArrowDown } from 'react-icons/fi';
 import { TypewriterText, GradientText } from '../components/AnimatedText';
 import { getHeroSync, getHero } from '../utils/dataStore';
-import { MiniPeopleScene } from '../components/MiniPeople';
 import { useEffect, useState } from 'react';
 import React from 'react';
 
@@ -223,11 +222,9 @@ const Hero = () => {
                                 fontSize: 'var(--text-6xl)',
                                 fontWeight: 800,
                                 lineHeight: 1.1,
-                                marginBottom: 'var(--spacing-md)',
-                                position: 'relative' // Needed for absolute positioning of mini people
+                                marginBottom: 'var(--spacing-md)'
                             }}
                         >
-                            <MiniPeopleScene />
                             <GradientText>{hero.name}</GradientText>
                         </motion.h1>
 
