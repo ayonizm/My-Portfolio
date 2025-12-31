@@ -161,7 +161,7 @@ export const GradientText = ({ children, className = '' }) => {
             }}
             style={{
                 backgroundSize: '200% 200%',
-                background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #a855f7 50%, #8b5cf6 75%, #6366f1 100%)',
+                background: 'var(--accent-gradient)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text'
