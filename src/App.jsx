@@ -12,6 +12,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import AllProjects from './pages/AllProjects';
 import ProtectedRoute from './components/ProtectedRoute';
 import Analysis from './pages/Analysis';
+import ThemeToggle from './components/ThemeToggle';
 import './index.css';
 
 const HomePage = () => {
@@ -31,6 +32,7 @@ function App() {
   return (
     <Router>
       <AnimatedCursor />
+      <ThemeToggle />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/analysis" element={<Analysis />} />
