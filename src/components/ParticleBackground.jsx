@@ -8,6 +8,17 @@ const ParticleBackground = () => {
         const ctx = canvas.getContext('2d');
         let animationFrameId;
         let particles = [];
+        let mouse = { x: null, y: null, radius: 150 };
+
+        const handleMouseMove = (event) => {
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+        };
+
+        const handleMouseLeave = () => {
+            mouse.x = null;
+            mouse.y = null;
+        };
 
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
@@ -30,6 +41,11 @@ const ParticleBackground = () => {
             }
         };
 
+        const handleResize = () => {
+            resizeCanvas();
+            createParticles();
+        };
+
         const drawParticles = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -46,6 +62,24 @@ const ParticleBackground = () => {
 
             // Update and draw particles
             particles.forEach((particle, i) => {
+                // Mouse repulsion
+                if (mouse.x != null) {
+                    const dx = particle.x - mouse.x;
+                    const dy = particle.y - mouse.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < mouse.radius) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (mouse.radius - distance) / mouse.radius;
+                        const directionX = forceDirectionX * force * 5;
+                        const directionY = forceDirectionY * force * 5;
+
+                        particle.x += directionX;
+                        particle.y += directionY;
+                    }
+                }
+
                 particle.x += particle.vx;
                 particle.y += particle.vy;
 
@@ -85,14 +119,15 @@ const ParticleBackground = () => {
         createParticles();
         drawParticles();
 
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            createParticles();
-        });
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseout', handleMouseLeave);
 
         return () => {
             cancelAnimationFrame(animationFrameId);
-            window.removeEventListener('resize', resizeCanvas);
+            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseout', handleMouseLeave);
         };
     }, []);
 
