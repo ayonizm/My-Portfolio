@@ -111,7 +111,7 @@ const Hero = () => {
         const handleResize = () => {
             const width = window.innerWidth;
             if (width < 450) {
-                setOrbitRadius(160);
+                setOrbitRadius(150);
             } else if (width < 768) {
                 setOrbitRadius(200);
             } else {
@@ -439,6 +439,8 @@ const Hero = () => {
           }
           .hero-image-wrapper {
             order: 1;
+            margin-bottom: 60px;
+            margin-top: 40px;
           }
           .hero-text > div {
             justify-content: center !important;
