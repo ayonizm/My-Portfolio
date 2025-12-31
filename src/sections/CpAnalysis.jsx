@@ -4,6 +4,7 @@ import { FaScroll } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import atcoderIcon from '../assets/atcoder.svg';
 import vjudgeIcon from '../assets/vjudge.svg';
+import LoadingDots from '../components/LoadingDots';
 
 const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => {
     return (
@@ -73,7 +74,7 @@ const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => 
                 alignItems: 'baseline',
                 gap: '4px'
             }}>
-                {value ?? '...'}
+                {value ?? <LoadingDots size={8} />}
             </div>
 
             <p style={{

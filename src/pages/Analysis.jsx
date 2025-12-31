@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import ParticleBackground from '../components/ParticleBackground';
+import LoadingDots from '../components/LoadingDots';
 
 const Analysis = () => {
     const [graphData, setGraphData] = useState([]);
@@ -169,25 +170,25 @@ const Analysis = () => {
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>Total Solved</h3>
                             <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--accent-primary)' }}>
-                                {loading ? '...' : stats.totalSolved}
+                                {loading ? <LoadingDots size={8} /> : stats.totalSolved}
                             </div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>Codeforces</h3>
                             <div style={{ fontSize: '2rem', fontWeight: 700, color: '#F44336' }}>
-                                {loading ? '...' : stats.cfSolved}
+                                {loading ? <LoadingDots size={8} /> : stats.cfSolved}
                             </div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>AtCoder</h3>
                             <div style={{ fontSize: '2rem', fontWeight: 700, color: '#00C0C0' }}>
-                                {loading ? '...' : stats.acSolved}
+                                {loading ? <LoadingDots size={8} /> : stats.acSolved}
                             </div>
                         </div>
                         <div style={{ textAlign: 'center' }}>
                             <h3 style={{ color: 'var(--text-muted)' }}>VJudge</h3>
                             <div style={{ fontSize: '2rem', fontWeight: 700, color: '#5cb85c' }}>
-                                {loading ? '...' : stats.vjSolved}
+                                {loading ? <LoadingDots size={8} /> : stats.vjSolved}
                             </div>
                         </div>
                     </div>
@@ -205,7 +206,7 @@ const Analysis = () => {
                                 justifyContent: 'center',
                                 color: 'var(--text-muted)'
                             }}>
-                                Loading data...
+                                <LoadingDots size={16} />
                             </div>
                         ) : (
                             <ResponsiveContainer width="100%" height="100%">
