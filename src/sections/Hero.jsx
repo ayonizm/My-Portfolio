@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { FiArrowDown } from 'react-icons/fi';
 import { TypewriterText, GradientText } from '../components/AnimatedText';
 import { getHeroSync, getHero } from '../utils/dataStore';
@@ -154,6 +154,30 @@ const Hero = () => {
         }
     };
 
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+
+    const mouseX = useSpring(x, { stiffness: 150, damping: 15 });
+    const mouseY = useSpring(y, { stiffness: 150, damping: 15 });
+
+    function handleMouseMove(event) {
+        const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
+        const centerX = left + width / 2;
+        const centerY = top + height / 2;
+
+        x.set(event.clientX - centerX);
+        y.set(event.clientY - centerY);
+    }
+
+    function handleMouseLeave() {
+        x.set(0);
+        y.set(0);
+    }
+
+    // Improve 3D rotation effect
+    const rotateX = useTransform(mouseY, [-200, 200], [15, -15]); // Up flows down
+    const rotateY = useTransform(mouseX, [-200, 200], [-15, 15]); // Left flows right
+
     return (
         <section className="hero-section" style={{
             minHeight: '100vh',
@@ -161,7 +185,8 @@ const Hero = () => {
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
-            padding: 'var(--spacing-xl) 0'
+            padding: 'var(--spacing-xl) 0',
+            perspective: 1000 // Add perspective container
         }}>
             <div className="container">
                 <motion.div
@@ -298,21 +323,19 @@ const Hero = () => {
                         style={{
                             position: 'relative',
                             display: 'flex',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            perspective: 1000 // Ensure perspective is here too
                         }}
+                        onMouseMove={handleMouseMove}
+                        onMouseLeave={handleMouseLeave}
                     >
                         <motion.div
-                            animate={{
-                                y: [0, -15, 0]
-                            }}
-                            transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                ease: 'easeInOut'
-                            }}
                             style={{
                                 position: 'relative',
-                                zIndex: 2
+                                zIndex: 2,
+                                rotateX,
+                                rotateY,
+                                transformStyle: "preserve-3d"
                             }}
                         >
                             <div style={{
@@ -326,7 +349,8 @@ const Hero = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                background: 'var(--bg-secondary)'
+                                background: 'var(--bg-secondary)',
+                                transform: 'translateZ(20px)' // Pop out slightly
                             }}>
                                 <img
                                     src={hero.image}
