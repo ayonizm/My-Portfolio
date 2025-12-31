@@ -94,8 +94,6 @@ const Hero = () => {
     const [scrollY, setScrollY] = useState(0);
     const [cfRating, setCfRating] = useState(null);
 
-    const [orbitRadius, setOrbitRadius] = useState(260);
-
     useEffect(() => {
         // Fetch Codeforces Rating
         fetch('https://codeforces.com/api/user.info?handles=ayon6594')
@@ -108,27 +106,8 @@ const Hero = () => {
             .catch(err => console.error('Failed to fetch CF rating:', err));
 
         const handleScroll = () => setScrollY(window.scrollY);
-        const handleResize = () => {
-            const width = window.innerWidth;
-            if (width < 450) {
-                setOrbitRadius(160);
-            } else if (width < 768) {
-                setOrbitRadius(200);
-            } else {
-                setOrbitRadius(260);
-            }
-        };
-
-        // Initial check
-        handleResize();
-
         window.addEventListener('scroll', handleScroll);
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('resize', handleResize);
-        };
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     useEffect(() => {
@@ -379,7 +358,7 @@ const Hero = () => {
                             />
 
                             {/* Orbiting Tech Icons */}
-                            <OrbitingIcons radius={orbitRadius} duration={30}>
+                            <OrbitingIcons radius={260} duration={30}>
                                 <img src={iconCpp} alt="C++" width="40" />
                                 <img src={iconJava} alt="Java" width="40" />
                                 <img src={iconPython} alt="Python" width="40" />
