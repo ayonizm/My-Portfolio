@@ -99,8 +99,9 @@
   /* Dark Olive */
   --accent-secondary: #8fbc8f;
   /* Sage Green */
-  --accent-gradient: linear-gradient(135deg, #556b2f 0%, #8fbc8f 100%);
-  --accent-glow: rgba(85, 107, 47, 0.3);
+  --accent-gradient: linear-gradient(135deg, #446030 0%, #7aa768 100%);
+  /* Button Green Gradient */
+  --accent-glow: rgba(68, 96, 48, 0.3);
 }
 
 /* Google Fonts Import */
