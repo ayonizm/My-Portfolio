@@ -10,10 +10,19 @@ const ParticleBackground = () => {
         let particles = [];
         let mouse = { x: null, y: null, radius: 150 };
 
+        let connectionDistance = 150;
+
         const handleMouseMove = (event) => {
             mouse.x = event.clientX;
             mouse.y = event.clientY;
         };
+
+        const handleUniqueTouch = (event) => {
+            if (event.touches.length > 0) {
+                mouse.x = event.touches[0].clientX;
+                mouse.y = event.touches[0].clientY;
+            }
+        }
 
         const handleMouseLeave = () => {
             mouse.x = null;
@@ -23,11 +32,16 @@ const ParticleBackground = () => {
         const resizeCanvas = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            // Adjust connection distance and particle count based on screen size
+            connectionDistance = Math.min(150, window.innerWidth / 3);
+            mouse.radius = Math.min(150, window.innerWidth / 4);
         };
 
         const createParticles = () => {
             particles = [];
-            const particleCount = Math.min(80, Math.floor(window.innerWidth / 20));
+            // Increase density slightly for mobile smoothness but cap it
+            const density = window.innerWidth < 768 ? 25 : 20;
+            const particleCount = Math.min(80, Math.floor(window.innerWidth / density));
 
             for (let i = 0; i < particleCount; i++) {
                 particles.push({
@@ -101,11 +115,11 @@ const ParticleBackground = () => {
                     const dy = particle.y - other.y;
                     const distance = Math.sqrt(dx * dx + dy * dy);
 
-                    if (distance < 150) {
+                    if (distance < connectionDistance) {
                         ctx.beginPath();
                         ctx.moveTo(particle.x, particle.y);
                         ctx.lineTo(other.x, other.y);
-                        ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / 150)})`;
+                        ctx.strokeStyle = `rgba(99, 102, 241, ${0.2 * (1 - distance / connectionDistance)})`;
                         ctx.lineWidth = 1;
                         ctx.stroke();
                     }
@@ -122,12 +136,18 @@ const ParticleBackground = () => {
         window.addEventListener('resize', handleResize);
         window.addEventListener('mousemove', handleMouseMove);
         window.addEventListener('mouseout', handleMouseLeave);
+        window.addEventListener('touchstart', handleUniqueTouch);
+        window.addEventListener('touchmove', handleUniqueTouch);
+        window.addEventListener('touchend', handleMouseLeave);
 
         return () => {
             cancelAnimationFrame(animationFrameId);
             window.removeEventListener('resize', handleResize);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseout', handleMouseLeave);
+            window.removeEventListener('touchstart', handleUniqueTouch);
+            window.removeEventListener('touchmove', handleUniqueTouch);
+            window.removeEventListener('touchend', handleMouseLeave);
         };
     }, []);
 
