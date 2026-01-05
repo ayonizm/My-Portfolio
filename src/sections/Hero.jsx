@@ -295,6 +295,7 @@ const Hero = () => {
                                 delay={0.5}
                                 xOffset="0px"
                                 yOffset="80px"
+                                size={150}
                             />
                             <FloatingLogo
                                 src={adamLogo}
@@ -302,6 +303,7 @@ const Hero = () => {
                                 delay={0.8}
                                 xOffset="100px"
                                 yOffset="80px"
+                                size={150}
                             />
                         </motion.div>
 
