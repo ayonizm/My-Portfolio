@@ -263,12 +263,8 @@ export const addProject = async (project) => {
   const newProject = { ...project, id: Date.now().toString() };
 
   if (isFirebaseConfigured()) {
-    try {
-      const docRef = await addDoc(collection(db, COLLECTIONS.PROJECTS), project);
-      newProject.id = docRef.id;
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    const docRef = await addDoc(collection(db, COLLECTIONS.PROJECTS), project);
+    newProject.id = docRef.id;
   }
 
   // Also update localStorage
@@ -282,11 +278,7 @@ export const addProject = async (project) => {
 
 export const updateProject = async (id, updates) => {
   if (isFirebaseConfigured()) {
-    try {
-      await updateDoc(doc(db, COLLECTIONS.PROJECTS, id), updates);
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    await updateDoc(doc(db, COLLECTIONS.PROJECTS, id), updates);
   }
 
   // Also update localStorage
@@ -302,11 +294,7 @@ export const updateProject = async (id, updates) => {
 
 export const deleteProject = async (id) => {
   if (isFirebaseConfigured()) {
-    try {
-      await deleteDoc(doc(db, COLLECTIONS.PROJECTS, id));
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    await deleteDoc(doc(db, COLLECTIONS.PROJECTS, id));
   }
 
   // Also update localStorage
@@ -342,12 +330,8 @@ export const addAchievement = async (achievement) => {
   const newAchievement = { ...achievement, id: Date.now().toString() };
 
   if (isFirebaseConfigured()) {
-    try {
-      const docRef = await addDoc(collection(db, COLLECTIONS.ACHIEVEMENTS), achievement);
-      newAchievement.id = docRef.id;
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    const docRef = await addDoc(collection(db, COLLECTIONS.ACHIEVEMENTS), achievement);
+    newAchievement.id = docRef.id;
   }
 
   const achievements = getAchievementsSync();
@@ -360,11 +344,7 @@ export const addAchievement = async (achievement) => {
 
 export const updateAchievement = async (id, updates) => {
   if (isFirebaseConfigured()) {
-    try {
-      await updateDoc(doc(db, COLLECTIONS.ACHIEVEMENTS, id), updates);
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    await updateDoc(doc(db, COLLECTIONS.ACHIEVEMENTS, id), updates);
   }
 
   const achievements = getAchievementsSync();
@@ -379,11 +359,7 @@ export const updateAchievement = async (id, updates) => {
 
 export const deleteAchievement = async (id) => {
   if (isFirebaseConfigured()) {
-    try {
-      await deleteDoc(doc(db, COLLECTIONS.ACHIEVEMENTS, id));
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    await deleteDoc(doc(db, COLLECTIONS.ACHIEVEMENTS, id));
   }
 
   const achievements = getAchievementsSync().filter(a => a.id !== id);
@@ -461,12 +437,9 @@ export const addAnalysis = async (item) => {
   const newItem = { ...item, id: Date.now().toString() };
 
   if (isFirebaseConfigured()) {
-    try {
-      const docRef = await addDoc(collection(db, COLLECTIONS.ANALYSIS), item);
-      newItem.id = docRef.id;
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    // Let error propagate if Firebase fails
+    const docRef = await addDoc(collection(db, COLLECTIONS.ANALYSIS), item);
+    newItem.id = docRef.id;
   }
 
   const analysis = getAnalysisSync();
@@ -483,11 +456,7 @@ export const addAnalysis = async (item) => {
 
 export const updateAnalysis = async (id, updates) => {
   if (isFirebaseConfigured()) {
-    try {
-      await updateDoc(doc(db, COLLECTIONS.ANALYSIS, id), updates);
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    await updateDoc(doc(db, COLLECTIONS.ANALYSIS, id), updates);
   }
 
   const analysis = getAnalysisSync();
@@ -502,11 +471,7 @@ export const updateAnalysis = async (id, updates) => {
 
 export const deleteAnalysis = async (id) => {
   if (isFirebaseConfigured()) {
-    try {
-      await deleteDoc(doc(db, COLLECTIONS.ANALYSIS, id));
-    } catch (error) {
-      console.error('Firebase error:', error);
-    }
+    await deleteDoc(doc(db, COLLECTIONS.ANALYSIS, id));
   }
 
   const analysis = getAnalysisSync().filter(a => a.id !== id);

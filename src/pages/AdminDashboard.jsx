@@ -142,7 +142,11 @@ const AdminDashboard = () => {
             resetForm();
         } catch (error) {
             console.error('Error saving:', error);
-            alert('Failed to save. Please try again.');
+            if (error.code === 'unavailable' || error.message.includes('offline')) {
+                alert('Connection failed. Please check your internet or Firebase configuration.');
+            } else {
+                alert(`Failed to save: ${error.message}`);
+            }
         } finally {
             setLoading(false);
         }
