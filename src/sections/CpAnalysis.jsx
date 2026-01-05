@@ -252,14 +252,14 @@ const CpAnalysis = () => {
                         Problem Solving
                     </motion.span>
                     <h2 className="section-title" style={{ margin: 0 }}>
-                        Ayon's CP Analysis
+                        Analysis
                     </h2>
                     <p style={{
                         color: 'var(--text-muted)',
                         maxWidth: '600px',
                         margin: 'var(--spacing-md) auto 0'
                     }}>
-                        Tracking my progress in competitive programming, open source contributions, and research.
+                        Tracking my progress 
                     </p>
                 </motion.div>
 

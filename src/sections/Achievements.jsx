@@ -153,7 +153,7 @@ const Achievements = () => {
                         maxWidth: '600px',
                         margin: 'var(--spacing-md) auto 0'
                     }}>
-                        Key accomplishments and recognitions throughout my journey as a developer.
+                        Key accomplishments and recognitions
                     </p>
                 </motion.div>
 

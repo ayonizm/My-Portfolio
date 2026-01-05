@@ -123,7 +123,7 @@ const Footer = () => {
         { icon: <FacebookIcon />, url: 'https://www.facebook.com/fahim.ahmed.74747', label: 'Facebook', color: '#1877f2' },
         { icon: <InstagramIcon />, url: 'https://www.instagram.com/fahim_ahmed_007?igsh=dHo1ZHpqbmtnaGY1', label: 'Instagram', color: '#e4405f' },
         { icon: <WhatsappIcon />, url: 'https://wa.me/8801832918792', label: 'WhatsApp', color: '#25d366' },
-        { icon: <LinkedinIcon />, url: 'https://www.linkedin.com/in/md-fahim-ahmed-674377347?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn', color: '#0077b5' },
+        { icon: <LinkedinIcon />, url: 'https://www.linkedin.com/in/md-fahim-ahmed-674377347/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn', color: '#0077b5' },
         { icon: <MailIcon />, url: 'mailto:fahimahmed89747@gmail.com', label: 'Email', color: '#ea4335' },
         { icon: <PhoneIcon />, url: 'tel:+8801832918792', label: 'Phone', color: '#3f4a59' },
     ];

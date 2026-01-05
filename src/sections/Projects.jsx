@@ -139,7 +139,7 @@ const Projects = () => {
                         maxWidth: '600px',
                         margin: 'var(--spacing-md) auto 0'
                     }}>
-                        A selection of my best work showcasing expertise in web development, design, and problem-solving.
+                        A selection of my best work 
                     </p>
                 </motion.div>
 
