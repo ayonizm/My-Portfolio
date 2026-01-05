@@ -3,11 +3,11 @@ import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { FiArrowDown } from 'react-icons/fi';
 import { getHero, getHeroSync } from '../utils/dataStore';
 import { GradientText, TypewriterText } from '../components/AnimatedText';
-import adamLogo from '../assets/adam.svg';
+import adamLogo from '../assets/adam.png';
 import nsuLogo from '../assets/NSU.svg';
 
 // Floating 3D Logo Component
-const FloatingLogo = ({ src, alt, delay = 0, xOffset = 0, yOffset = 0, size = 60 }) => {
+const FloatingLogo = ({ src, alt, delay = 0, xOffset = 0, yOffset = 0, size = 120 }) => {
     const x = useMotionValue(0);
     const y = useMotionValue(0);
     const rotateX = useTransform(y, [-50, 50], [15, -15]);
@@ -56,7 +56,7 @@ const FloatingLogo = ({ src, alt, delay = 0, xOffset = 0, yOffset = 0, size = 60
                     rotateX,
                     rotateY,
                     cursor: 'pointer',
-                    filter: "drop-shadow(0 0 10px rgba(255, 255, 255, 0.3))", // Soft glow
+                    // Removed filter/glow as requested implicitly by "remove glittering" to make it clean
                 }}
             >
                 <div style={{
@@ -72,29 +72,6 @@ const FloatingLogo = ({ src, alt, delay = 0, xOffset = 0, yOffset = 0, size = 60
                             width: '100%',
                             height: '100%',
                             objectFit: 'contain'
-                        }}
-                    />
-
-                    {/* Glitter/Shine Effect */}
-                    <motion.div
-                        animate={{
-                            opacity: [0, 0.5, 0],
-                            left: ['-50%', '150%']
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: Math.random() * 2
-                        }}
-                        style={{
-                            position: 'absolute',
-                            top: 0,
-                            width: '50%',
-                            height: '100%',
-                            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
-                            transform: 'skewX(-25deg)',
-                            pointerEvents: 'none'
                         }}
                     />
                 </div>
