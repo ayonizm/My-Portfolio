@@ -100,7 +100,7 @@ const defaultAchievements = [
 ];
 
 const defaultHero = {
-  name: 'Md.Anisul Haque Chowdhury',
+  name: 'Md.Fahim Ahmed',
   tagline: 'Full Stack Developer & Creative Technologist',
   description: 'I craft beautiful, high-performance web experiences that blend stunning design with cutting-edge technology. Passionate about creating digital solutions that make a difference.',
   image: '/port.jpg'
@@ -153,6 +153,7 @@ export const cleanData = () => {
   const uniqueProjects = Array.from(new Map(projects.map(p => [p.id, p])).values());
   localStorage.setItem(KEYS.PROJECTS, JSON.stringify(uniqueProjects));
   // Achievements
+  const achievements = JSON.parse(localStorage.getItem(KEYS.ACHIEVEMENTS) || '[]');
   const uniqueAchievements = Array.from(new Map(achievements.map(a => [a.id, a])).values());
   localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(uniqueAchievements));
   // Analysis
