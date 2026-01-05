@@ -294,15 +294,15 @@ const Hero = () => {
                                 alt="NSU"
                                 delay={0.5}
                                 xOffset="-40px"
-                                yOffset="80px"
+                                yOffset="70px"
                                 size={150}
                             />
                             <FloatingLogo
                                 src={adamLogo}
                                 alt="Adam"
                                 delay={0.8}
-                                xOffset="0px"
-                                yOffset="80px"
+                                xOffset="140px"
+                                yOffset="90px"
                                 size={90}
                             />
                         </motion.div>
