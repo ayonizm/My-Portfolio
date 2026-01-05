@@ -185,13 +185,27 @@ const AdminDashboard = () => {
 
     const startEdit = (item) => {
         setEditingItem(item);
-        setFormData(item);
+        if (activeTab === 'projects') {
+            setFormData({ ...item, tags: item.tags?.join(', ') || '' });
+        } else if (activeTab === 'Jobs') {
+            setFormData({ ...item, jobTitle: item.jobTitle || '' });
+        } else {
+            setFormData({ ...item });
+        }
         setShowForm(true);
     };
 
     const startAdd = () => {
         setEditingItem(null);
-        setFormData({});
+        if (activeTab === 'projects') {
+            setFormData({ title: '', description: '', tags: '', demoLine: '', githubLink: '', image: '' });
+        } else if (activeTab === 'achievements') {
+            setFormData({ title: '', description: '', date: '', icon: '' });
+        } else if (activeTab === 'Jobs') {
+            setFormData({ title: '', jobTitle: '', value: '', image: '', icon: '' });
+        } else {
+            setFormData({});
+        }
         setShowForm(true);
     };
 

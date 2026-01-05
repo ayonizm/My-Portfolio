@@ -34,49 +34,65 @@ const StatCard = ({ item, index }) => {
                 zIndex: 0
             }} />
 
+            {/* Logo/Icon Container - Made Bigger */}
             <div style={{
-                width: '60px',
-                height: '60px',
-                borderRadius: '16px',
+                width: '100px',
+                height: '100px',
+                borderRadius: '24px',
                 background: 'var(--bg-secondary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 'var(--spacing-md)',
                 color: 'var(--text-primary)',
-                fontSize: '1.8rem',
+                fontSize: '2.5rem',
                 border: '1px solid var(--border-color)',
                 zIndex: 1
             }}>
                 {item.image ? (
-                    <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '16px' }} />
+                    <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '24px' }} />
                 ) : (
                     <span>{item.icon || '📊'}</span>
                 )}
             </div>
 
+            {/* Title (Company Name) */}
             <h3 style={{
-                color: 'var(--text-secondary)',
-                fontSize: 'var(--text-base)',
+                color: 'var(--text-primary)',
+                fontSize: 'var(--text-2xl)',
                 marginBottom: 'var(--spacing-xs)',
-                fontWeight: 500,
+                fontWeight: 700,
                 zIndex: 1
             }}>
                 {item.title}
             </h3>
 
+            {/* Job Title - New Field */}
+            {item.jobTitle && (
+                <div style={{
+                    color: 'var(--accent-primary)',
+                    fontSize: 'var(--text-lg)',
+                    marginBottom: 'var(--spacing-xs)',
+                    fontWeight: 600,
+                    zIndex: 1
+                }}>
+                    {item.jobTitle}
+                </div>
+            )}
+
+            {/* Value (Duration) */}
             <div style={{
-                fontSize: '2.5rem',
-                fontWeight: 700,
-                color: 'var(--text-primary)',
+                fontSize: 'var(--text-lg)',
+                fontWeight: 500,
+                color: 'var(--text-muted)',
                 marginBottom: 'var(--spacing-xs)',
-                fontFamily: 'var(--font-display)',
+                fontFamily: 'var(--font-primary)',
                 zIndex: 1,
                 display: 'flex',
                 alignItems: 'baseline',
                 gap: '4px'
             }}>
-                {item.value ?? <LoadingDots size={8} />}
+                {item.value ?? <LoadingDots size={6} />}
             </div>
 
             {/* Visual Graph/Bar */}
@@ -91,7 +107,7 @@ const StatCard = ({ item, index }) => {
             }}>
                 <motion.div
                     initial={{ width: 0 }}
-                    whileInView={{ width: '75%' }}
+                    whileInView={{ width: '100%' }}
                     transition={{ duration: 1.5, ease: "easeOut", delay: (index * 0.1) + 0.2 }}
                     style={{
                         height: '100%',

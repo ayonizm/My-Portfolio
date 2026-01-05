@@ -54,7 +54,7 @@ const AllProjects = () => {
                         maxWidth: '600px',
                         marginTop: 'var(--spacing-md)'
                     }}>
-                        A complete collection of my work showcasing various technologies and creative solutions.
+                        A complete collection of my work
                     </p>
                 </motion.div>
 
@@ -174,7 +174,7 @@ const AllProjects = () => {
                             color: 'var(--text-muted)'
                         }}
                     >
-                        No projects found. Add some from the admin dashboard!
+                        No projects found.
                     </motion.div>
                 )}
             </div>
