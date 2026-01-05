@@ -303,7 +303,7 @@ const Hero = () => {
                                 delay={0.8}
                                 xOffset="100px"
                                 yOffset="80px"
-                                size={150}
+                                size={90}
                             />
                         </motion.div>
 
