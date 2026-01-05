@@ -114,21 +114,16 @@ const AdminDashboard = () => {
 
     // Analysis handlers
     const handleSaveAnalysis = async () => {
-        // Validation: Check for Title and (Value OR JobTitle)
-        if (!formData.title || (!formData.value && !formData.jobTitle)) {
-            alert('Please fill in Title and Value/Job Title fields.');
+        // Validation: Check for Title and Value (Job Duration)
+        if (!formData.title || !formData.value) {
+            alert('Please fill in Title and Job Duration fields.');
             return;
         }
 
-        // Compatibility: Ensure 'value' exists if 'jobTitle' is used
-        const dataToSave = {
-            ...formData,
-            value: formData.value || formData.jobTitle // Map jobTitle to value for frontend compatibility
-        };
         if (editingItem) {
-            await updateAnalysis(editingItem.id, dataToSave);
+            await updateAnalysis(editingItem.id, formData);
         } else {
-            await addAnalysis(dataToSave);
+            await addAnalysis(formData);
         }
         await loadData();
         resetForm();
@@ -585,7 +580,7 @@ const AdminDashboard = () => {
                             >
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-lg)' }}>
                                     <h3 style={{ fontSize: 'var(--text-xl)', fontWeight: 600 }}>
-                                        {editingItem ? 'Edit Analysis Card' : 'Add New Analysis Card'}
+                                        {editingItem ? 'Edit Job Card' : 'Add New Job Card'}
                                     </h3>
                                     <motion.button
                                         onClick={resetForm}
@@ -603,35 +598,23 @@ const AdminDashboard = () => {
                                         className="form-input"
                                         value={formData.title || ''}
                                         onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                                        placeholder=""
+                                        placeholder="e.g. Google"
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-label">Job Title *</label>
+                                    <label className="form-label">Job Duration *</label>
                                     <input
                                         type="text"
                                         className="form-input"
-                                        value={formData.jobTitle || ''}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
-                                        placeholder=""
+                                        value={formData.value || ''}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, value: e.target.value }))}
+                                        placeholder="e.g. 2023 - Present"
                                     />
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-label">Icon (Emoji)</label>
-                                    <input
-                                        type="text"
-                                        className="form-input"
-                                        value={formData.icon || ''}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, icon: e.target.value }))}
-                                        placeholder="📊"
-                                        style={{ maxWidth: '100px' }}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="form-label">Image (Logo - Optional)</label>
+                                    <label className="form-label">Company Logo</label>
                                     <input
                                         type="file"
                                         accept="image/*"
