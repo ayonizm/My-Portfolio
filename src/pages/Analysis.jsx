@@ -4,6 +4,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { FiArrowLeft } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import ParticleBackground from '../components/ParticleBackground';
+import { fetchCodeforces } from '../utils/codeforces';
 import LoadingDots from '../components/LoadingDots';
 
 const Analysis = () => {
@@ -20,7 +21,8 @@ const Analysis = () => {
         const fetchData = async () => {
             const promises = [
                 // Codeforces Submissions
-                fetch('https://codeforces.com/api/user.status?handle=ayon6594&from=1&count=50000').then(res => res.json()),
+                // Codeforces Submissions
+                fetchCodeforces('user.status', { handle: 'ayonizm', from: 1, count: 50000 }),
                 // AtCoder Submissions
                 fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/submissions?user=ayonizm&from_second=0').then(res => res.json()),
                 // VJudge Data (via Proxy)

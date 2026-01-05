@@ -120,16 +120,12 @@ const VJudgeIcon = () => (
 
 const Footer = () => {
     const socialLinks = [
-        { icon: <CodeforcesIcon />, url: 'https://codeforces.com/profile/ayon6594', label: 'Codeforces', color: '#1f8dd6' },
-        { icon: <AtCoderIcon />, url: 'https://atcoder.jp/users/ayonizm', label: 'AtCoder', color: '#000' },
-        { icon: <VJudgeIcon />, url: 'https://vjudge.net/user/ayonizm', label: 'VJudge', color: '#fff' },
-        { icon: <FacebookIcon />, url: 'https://www.facebook.com/ayon.chowdhury.16144/', label: 'Facebook', color: '#1877f2' },
-        { icon: <InstagramIcon />, url: 'https://www.instagram.com/ayonizm/', label: 'Instagram', color: '#e4405f' },
-        { icon: <WhatsappIcon />, url: 'https://wa.me/8801623756808', label: 'WhatsApp', color: '#25d366' },
-        { icon: <GithubIcon />, url: 'https://github.com/ayonizm', label: 'GitHub', color: '#333' },
-        { icon: <LinkedinIcon />, url: 'https://www.linkedin.com/in/md-anisul-haque-chowdhury-8315a5231/', label: 'LinkedIn', color: '#0077b5' },
-        { icon: <MailIcon />, url: 'mailto:aayonchowdhuryy@gmail.com', label: 'Email', color: '#ea4335' },
-        { icon: <PhoneIcon />, url: 'tel:+8801623756808', label: 'Phone', color: '#3f4a59' },
+        { icon: <FacebookIcon />, url: 'https://www.facebook.com/fahim.ahmed.74747', label: 'Facebook', color: '#1877f2' },
+        { icon: <InstagramIcon />, url: 'https://www.instagram.com/fahim_ahmed_007?igsh=dHo1ZHpqbmtnaGY1', label: 'Instagram', color: '#e4405f' },
+        { icon: <WhatsappIcon />, url: 'https://wa.me/8801832918792', label: 'WhatsApp', color: '#25d366' },
+        { icon: <LinkedinIcon />, url: 'https://www.linkedin.com/in/md-fahim-ahmed-674377347?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app', label: 'LinkedIn', color: '#0077b5' },
+        { icon: <MailIcon />, url: 'mailto:fahimahmed89747@gmail.com', label: 'Email', color: '#ea4335' },
+        { icon: <PhoneIcon />, url: 'tel:+8801832918792', label: 'Phone', color: '#3f4a59' },
     ];
 
     const currentYear = new Date().getFullYear();
@@ -196,23 +192,23 @@ const Footer = () => {
                     <div className="footer-contact">
                         <h4 style={{ marginBottom: 'var(--spacing-md)' }}>Get in Touch</h4>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-sm)' }}>
-                            <a href="mailto:aayonchowdhuryy@gmail.com" style={{
+                            <a href="mailto:fahimahmed89747@gmail.com" style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 'var(--spacing-xs)',
                                 color: 'var(--text-secondary)',
                                 textDecoration: 'none'
                             }}>
-                                <MailIcon /> aayonchowdhuryy@gmail.com
+                                <MailIcon /> fahimahmed89747@gmail.com
                             </a>
-                            <a href="tel:+8801623756808" style={{
+                            <a href="tel:+880 1832-918792" style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: 'var(--spacing-xs)',
                                 color: 'var(--text-secondary)',
                                 textDecoration: 'none'
                             }}>
-                                <PhoneIcon /> +880 1623 756 808
+                                <PhoneIcon /> +880 1832-918792
                             </a>
                         </div>
                     </div>

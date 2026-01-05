@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import atcoderIcon from '../assets/atcoder.svg';
 import vjudgeIcon from '../assets/vjudge.svg';
 import LoadingDots from '../components/LoadingDots';
+import { fetchCodeforces } from '../utils/codeforces';
 
 const StatCard = ({ title, value, icon: Icon, subtext, color, delay, type }) => {
     return (
@@ -125,9 +126,9 @@ const CpAnalysis = () => {
         const fetchData = async () => {
             const promises = [
                 // Codeforces Rating/Rank
-                fetch('https://codeforces.com/api/user.info?handles=ayon6594').then(res => res.json()),
+                fetchCodeforces('user.info', { handles: 'ayon6594' }),
                 // Codeforces Submissions
-                fetch('https://codeforces.com/api/user.status?handle=ayon6594&from=1&count=50000').then(res => res.json()),
+                fetchCodeforces('user.status', { handle: 'ayon6594', from: 1, count: 50000 }),
                 // AtCoder History
                 fetch('https://kenkoooo.com/atcoder/atcoder-api/v3/user/contest_history?user=ayonizm').then(res => res.json()),
                 // AtCoder Submissions
