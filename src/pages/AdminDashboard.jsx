@@ -114,6 +114,10 @@ const AdminDashboard = () => {
 
     // Analysis handlers
     const handleSaveAnalysis = async () => {
+        if (!formData.title || !formData.value) {
+            alert('Please fill in both Title and Value fields.');
+            return;
+        }
         if (editingItem) {
             await updateAnalysis(editingItem.id, formData);
         } else {
@@ -592,7 +596,7 @@ const AdminDashboard = () => {
                                         className="form-input"
                                         value={formData.title || ''}
                                         onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                                        placeholder="e.g. Codeforces Solved"
+                                        placeholder=""
                                     />
                                 </div>
 
@@ -603,7 +607,7 @@ const AdminDashboard = () => {
                                         className="form-input"
                                         value={formData.value || ''}
                                         onChange={(e) => setFormData(prev => ({ ...prev, value: e.target.value }))}
-                                        placeholder="e.g. 696"
+                                        placeholder=""
                                     />
                                 </div>
 
