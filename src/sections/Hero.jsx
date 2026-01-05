@@ -1,7 +1,10 @@
+import React, { useState, useEffect } from 'react';
+import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
+import { FiArrowDown } from 'react-icons/fi';
+import { getHero, getHeroSync } from '../utils/dataStore';
+import { GradientText, TypewriterText } from '../components/AnimatedText';
 import adamLogo from '../assets/adam.svg';
 import nsuLogo from '../assets/NSU.svg';
-
-// ... (previous imports)
 
 // Floating 3D Logo Component
 const FloatingLogo = ({ src, alt, delay = 0, xOffset = 0, yOffset = 0, size = 60 }) => {
