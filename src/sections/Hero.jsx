@@ -293,7 +293,7 @@ const Hero = () => {
                                 src={nsuLogo}
                                 alt="NSU"
                                 delay={0.5}
-                                xOffset="0px"
+                                xOffset="-40px"
                                 yOffset="80px"
                                 size={150}
                             />
@@ -301,7 +301,7 @@ const Hero = () => {
                                 src={adamLogo}
                                 alt="Adam"
                                 delay={0.8}
-                                xOffset="100px"
+                                xOffset="0px"
                                 yOffset="80px"
                                 size={90}
                             />
