@@ -56,6 +56,10 @@ const AdminDashboard = () => {
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
         if (file) {
+            if (file.size > 1024 * 512) { // 512KB limit
+                alert('Image too large! Please use an image smaller than 512KB.');
+                return;
+            }
             const base64 = await convertToBase64(file);
             setFormData(prev => ({ ...prev, image: base64 }));
         }
@@ -64,11 +68,13 @@ const AdminDashboard = () => {
     // Project handlers
     const handleSaveProject = async () => {
         if (editingItem) {
-            await updateProject(editingItem.id, formData);
+            const updated = await updateProject(editingItem.id, formData);
+            setProjects(prev => prev.map(p => p.id === editingItem.id ? updated : p));
         } else {
-            await addProject({ ...formData, featured: true });
+            const newProj = await addProject({ ...formData, featured: true });
+            setProjects(prev => [...prev, newProj]);
         }
-        await loadData();
+        // await loadData();
         resetForm();
     };
 
@@ -90,11 +96,13 @@ const AdminDashboard = () => {
     // Achievement handlers
     const handleSaveAchievement = async () => {
         if (editingItem) {
-            await updateAchievement(editingItem.id, formData);
+            const updated = await updateAchievement(editingItem.id, formData);
+            setAchievements(prev => prev.map(a => a.id === editingItem.id ? updated : a));
         } else {
-            await addAchievement(formData);
+            const newAch = await addAchievement(formData);
+            setAchievements(prev => [...prev, newAch]);
         }
-        await loadData();
+        // await loadData();
         resetForm();
     };
 
@@ -124,11 +132,13 @@ const AdminDashboard = () => {
         setLoading(true);
         try {
             if (editingItem) {
-                await updateAnalysis(editingItem.id, formData);
+                const updatedItem = await updateAnalysis(editingItem.id, formData);
+                setAnalysis(prev => prev.map(item => item.id === editingItem.id ? updatedItem : item));
             } else {
-                await addAnalysis(formData);
+                const newItem = await addAnalysis(formData);
+                setAnalysis(prev => [...prev, newItem]);
             }
-            await loadData();
+            // await loadData(); // Don't reload, it causes sync issues
             resetForm();
         } catch (error) {
             console.error('Error saving:', error);

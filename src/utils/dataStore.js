@@ -32,9 +32,14 @@ const KEYS = {
 };
 
 // Check if Firebase is properly configured
+// Check if Firebase is properly configured
 const isFirebaseConfigured = () => {
   try {
-    return db && !db._settings?.host?.includes('YOUR_');
+    // Check if any of the critical config values are still placeholders
+    const config = db.app.options;
+    return config &&
+      config.apiKey && !config.apiKey.includes('YOUR_') &&
+      config.projectId && !config.projectId.includes('YOUR_');
   } catch {
     return false;
   }
@@ -513,7 +518,7 @@ export const deleteAnalysis = async (id) => {
 
 // ============ AUTH ============
 
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD;
 
 export const login = (password) => {
   if (password === ADMIN_PASSWORD) {
