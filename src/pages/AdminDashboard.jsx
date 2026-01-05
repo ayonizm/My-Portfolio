@@ -114,14 +114,21 @@ const AdminDashboard = () => {
 
     // Analysis handlers
     const handleSaveAnalysis = async () => {
-        if (!formData.title || !formData.value) {
-            alert('Please fill in both Title and Value fields.');
+        // Validation: Check for Title and (Value OR JobTitle)
+        if (!formData.title || (!formData.value && !formData.jobTitle)) {
+            alert('Please fill in Title and Value/Job Title fields.');
             return;
         }
+
+        // Compatibility: Ensure 'value' exists if 'jobTitle' is used
+        const dataToSave = {
+            ...formData,
+            value: formData.value || formData.jobTitle // Map jobTitle to value for frontend compatibility
+        };
         if (editingItem) {
-            await updateAnalysis(editingItem.id, formData);
+            await updateAnalysis(editingItem.id, dataToSave);
         } else {
-            await addAnalysis(formData);
+            await addAnalysis(dataToSave);
         }
         await loadData();
         resetForm();
@@ -171,7 +178,7 @@ const AdminDashboard = () => {
     const tabs = [
         { id: 'projects', label: 'Projects', icon: FiGrid },
         { id: 'achievements', label: 'Achievements', icon: FiAward },
-        { id: 'analysis', label: 'Analysis', icon: FiGrid },
+        { id: 'Jobs', label: 'Jobs', icon: FiGrid },
         { id: 'hero', label: 'Hero Settings', icon: FiImage }
     ];
 
@@ -549,9 +556,9 @@ const AdminDashboard = () => {
                     </motion.div>
                 )}
 
-                {activeTab === 'analysis' && (
+                {activeTab === 'Jobs' && (
                     <motion.div
-                        key="analysis"
+                        key="jobs"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
@@ -565,7 +572,7 @@ const AdminDashboard = () => {
                                 style={{ marginBottom: 'var(--spacing-lg)', display: 'flex', alignItems: 'center', gap: '8px' }}
                             >
                                 <FiPlus />
-                                Add New Analysis Card
+                                Add New Job Card
                             </motion.button>
                         )}
 
@@ -601,12 +608,12 @@ const AdminDashboard = () => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-label">Value *</label>
+                                    <label className="form-label">Job Title *</label>
                                     <input
                                         type="text"
                                         className="form-input"
-                                        value={formData.value || ''}
-                                        onChange={(e) => setFormData(prev => ({ ...prev, value: e.target.value }))}
+                                        value={formData.jobTitle || ''}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
                                         placeholder=""
                                     />
                                 </div>

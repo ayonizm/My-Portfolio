@@ -259,6 +259,7 @@ export const addProject = async (project) => {
   const projects = getProjectsSync();
   projects.push(newProject);
   localStorage.setItem(KEYS.PROJECTS, JSON.stringify(projects));
+  dispatchLocalChange(KEYS.PROJECTS, projects);
 
   return newProject;
 };
@@ -278,6 +279,7 @@ export const updateProject = async (id, updates) => {
   if (index !== -1) {
     projects[index] = { ...projects[index], ...updates };
     localStorage.setItem(KEYS.PROJECTS, JSON.stringify(projects));
+    dispatchLocalChange(KEYS.PROJECTS, projects);
   }
   return projects[index];
 };
@@ -294,6 +296,7 @@ export const deleteProject = async (id) => {
   // Also update localStorage
   const projects = getProjectsSync().filter(p => p.id !== id);
   localStorage.setItem(KEYS.PROJECTS, JSON.stringify(projects));
+  dispatchLocalChange(KEYS.PROJECTS, projects);
 };
 
 // ============ ACHIEVEMENTS ============
@@ -334,6 +337,7 @@ export const addAchievement = async (achievement) => {
   const achievements = getAchievementsSync();
   achievements.push(newAchievement);
   localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
+  dispatchLocalChange(KEYS.ACHIEVEMENTS, achievements);
 
   return newAchievement;
 };
@@ -352,6 +356,7 @@ export const updateAchievement = async (id, updates) => {
   if (index !== -1) {
     achievements[index] = { ...achievements[index], ...updates };
     localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
+    dispatchLocalChange(KEYS.ACHIEVEMENTS, achievements);
   }
   return achievements[index];
 };
@@ -367,6 +372,7 @@ export const deleteAchievement = async (id) => {
 
   const achievements = getAchievementsSync().filter(a => a.id !== id);
   localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(achievements));
+  dispatchLocalChange(KEYS.ACHIEVEMENTS, achievements);
 };
 
 // ============ HERO ============
@@ -408,6 +414,7 @@ export const updateHero = async (updates) => {
 
   localStorage.setItem(KEYS.HERO, JSON.stringify(newHero));
   localStorage.setItem(KEYS.HERO, JSON.stringify(newHero));
+  dispatchLocalChange(KEYS.HERO, newHero);
   return newHero;
 };
 
@@ -449,6 +456,7 @@ export const addAnalysis = async (item) => {
   const analysis = getAnalysisSync();
   analysis.push(newItem);
   localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+  dispatchLocalChange(KEYS.ANALYSIS, analysis);
 
   return newItem;
 };
@@ -467,6 +475,7 @@ export const updateAnalysis = async (id, updates) => {
   if (index !== -1) {
     analysis[index] = { ...analysis[index], ...updates };
     localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+    dispatchLocalChange(KEYS.ANALYSIS, analysis);
   }
   return analysis[index];
 };
@@ -482,18 +491,10 @@ export const deleteAnalysis = async (id) => {
 
   const analysis = getAnalysisSync().filter(a => a.id !== id);
   localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+  dispatchLocalChange(KEYS.ANALYSIS, analysis);
 };
 
-export const subscribeToAnalysis = (callback) => {
-  if (isFirebaseConfigured()) {
-    return onSnapshot(collection(db, COLLECTIONS.ANALYSIS), (snapshot) => {
-      const analysis = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-      localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
-      callback(analysis);
-    });
-  }
-  return () => { };
-};
+
 
 // ============ AUTH ============
 
@@ -526,7 +527,15 @@ export const convertToBase64 = (file) => {
   });
 };
 
-// Subscribe to real-time updates (Firebase only)
+// Helper to dispatch local change events
+const dispatchLocalChange = (key, data) => {
+  const event = new CustomEvent('local-data-change', {
+    detail: { key, data }
+  });
+  window.dispatchEvent(event);
+};
+
+// Subscribe to real-time updates (Firebase + LocalStorage support)
 export const subscribeToProjects = (callback) => {
   if (isFirebaseConfigured()) {
     return onSnapshot(collection(db, COLLECTIONS.PROJECTS), (snapshot) => {
@@ -535,7 +544,15 @@ export const subscribeToProjects = (callback) => {
       callback(projects);
     });
   }
-  return () => { }; // Return empty unsubscribe function
+
+  // Local storage listener
+  const handler = (e) => {
+    if (e.detail && e.detail.key === KEYS.PROJECTS) {
+      callback(e.detail.data);
+    }
+  };
+  window.addEventListener('local-data-change', handler);
+  return () => window.removeEventListener('local-data-change', handler);
 };
 
 export const subscribeToAchievements = (callback) => {
@@ -546,7 +563,32 @@ export const subscribeToAchievements = (callback) => {
       callback(achievements);
     });
   }
-  return () => { };
+
+  const handler = (e) => {
+    if (e.detail && e.detail.key === KEYS.ACHIEVEMENTS) {
+      callback(e.detail.data);
+    }
+  };
+  window.addEventListener('local-data-change', handler);
+  return () => window.removeEventListener('local-data-change', handler);
+};
+
+export const subscribeToAnalysis = (callback) => {
+  if (isFirebaseConfigured()) {
+    return onSnapshot(collection(db, COLLECTIONS.ANALYSIS), (snapshot) => {
+      const analysis = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+      callback(analysis);
+    });
+  }
+
+  const handler = (e) => {
+    if (e.detail && e.detail.key === KEYS.ANALYSIS) {
+      callback(e.detail.data);
+    }
+  };
+  window.addEventListener('local-data-change', handler);
+  return () => window.removeEventListener('local-data-change', handler);
 };
 
 // Cleanup duplicate data in Firebase (same content, different IDs)
