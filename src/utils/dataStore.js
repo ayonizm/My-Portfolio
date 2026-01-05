@@ -17,6 +17,7 @@ import { db } from './firebase';
 const COLLECTIONS = {
   PROJECTS: 'projects',
   ACHIEVEMENTS: 'achievements',
+  ANALYSIS: 'analysis',
   HERO: 'hero',
   SETTINGS: 'settings'
 };
@@ -25,6 +26,7 @@ const COLLECTIONS = {
 const KEYS = {
   PROJECTS: 'portfolio_projects',
   ACHIEVEMENTS: 'portfolio_achievements',
+  ANALYSIS: 'portfolio_analysis',
   HERO: 'portfolio_hero',
   AUTH: 'portfolio_auth'
 };
@@ -104,10 +106,42 @@ const defaultHero = {
   image: '/port.jpg'
 };
 
+const defaultAnalysis = [
+  {
+    id: 'ana_1001',
+    title: 'Codeforces Solved',
+    value: '696',
+    image: '', // Use existing icon logic or placeholder if image is empty
+    icon: '📊'
+  },
+  {
+    id: 'ana_1002',
+    title: 'GitHub Repos',
+    value: '3',
+    image: '',
+    icon: '🐙'
+  },
+  {
+    id: 'ana_1003',
+    title: 'AtCoder Solved',
+    value: '131',
+    image: '',
+    icon: '🍙'
+  },
+  {
+    id: 'ana_1004',
+    title: 'VJudge Solved',
+    value: '904',
+    image: '',
+    icon: '⚖️'
+  }
+];
+
 // Reset all data to defaults (clears corrupted data)
 export const resetAllData = () => {
   localStorage.setItem(KEYS.PROJECTS, JSON.stringify(defaultProjects));
   localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(defaultAchievements));
+  localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(defaultAnalysis));
   localStorage.setItem(KEYS.HERO, JSON.stringify(defaultHero));
   console.log('All data reset to defaults');
 };
@@ -119,9 +153,12 @@ export const cleanData = () => {
   const uniqueProjects = Array.from(new Map(projects.map(p => [p.id, p])).values());
   localStorage.setItem(KEYS.PROJECTS, JSON.stringify(uniqueProjects));
   // Achievements
-  const achievements = JSON.parse(localStorage.getItem(KEYS.ACHIEVEMENTS) || '[]');
   const uniqueAchievements = Array.from(new Map(achievements.map(a => [a.id, a])).values());
   localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(uniqueAchievements));
+  // Analysis
+  const analysis = JSON.parse(localStorage.getItem(KEYS.ANALYSIS) || '[]');
+  const uniqueAnalysis = Array.from(new Map(analysis.map(a => [a.id, a])).values());
+  localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(uniqueAnalysis));
 };
 
 // Initialize data in localStorage if not exists
@@ -131,6 +168,9 @@ const initializeLocalData = () => {
   }
   if (!localStorage.getItem(KEYS.ACHIEVEMENTS)) {
     localStorage.setItem(KEYS.ACHIEVEMENTS, JSON.stringify(defaultAchievements));
+  }
+  if (!localStorage.getItem(KEYS.ANALYSIS)) {
+    localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(defaultAnalysis));
   }
   if (!localStorage.getItem(KEYS.HERO)) {
     localStorage.setItem(KEYS.HERO, JSON.stringify(defaultHero));
@@ -366,7 +406,92 @@ export const updateHero = async (updates) => {
   }
 
   localStorage.setItem(KEYS.HERO, JSON.stringify(newHero));
+  localStorage.setItem(KEYS.HERO, JSON.stringify(newHero));
   return newHero;
+};
+
+// ============ ANALYSIS ============
+
+export const getAnalysis = async () => {
+  if (isFirebaseConfigured()) {
+    try {
+      const snapshot = await getDocs(collection(db, COLLECTIONS.ANALYSIS));
+      const analysis = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+      return analysis;
+    } catch (error) {
+      console.error('Firebase error:', error);
+    }
+  }
+
+  initializeLocalData();
+  return JSON.parse(localStorage.getItem(KEYS.ANALYSIS) || '[]');
+};
+
+export const getAnalysisSync = () => {
+  initializeLocalData();
+  return JSON.parse(localStorage.getItem(KEYS.ANALYSIS) || '[]');
+};
+
+export const addAnalysis = async (item) => {
+  const newItem = { ...item, id: Date.now().toString() };
+
+  if (isFirebaseConfigured()) {
+    try {
+      const docRef = await addDoc(collection(db, COLLECTIONS.ANALYSIS), item);
+      newItem.id = docRef.id;
+    } catch (error) {
+      console.error('Firebase error:', error);
+    }
+  }
+
+  const analysis = getAnalysisSync();
+  analysis.push(newItem);
+  localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+
+  return newItem;
+};
+
+export const updateAnalysis = async (id, updates) => {
+  if (isFirebaseConfigured()) {
+    try {
+      await updateDoc(doc(db, COLLECTIONS.ANALYSIS, id), updates);
+    } catch (error) {
+      console.error('Firebase error:', error);
+    }
+  }
+
+  const analysis = getAnalysisSync();
+  const index = analysis.findIndex(a => a.id === id);
+  if (index !== -1) {
+    analysis[index] = { ...analysis[index], ...updates };
+    localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+  }
+  return analysis[index];
+};
+
+export const deleteAnalysis = async (id) => {
+  if (isFirebaseConfigured()) {
+    try {
+      await deleteDoc(doc(db, COLLECTIONS.ANALYSIS, id));
+    } catch (error) {
+      console.error('Firebase error:', error);
+    }
+  }
+
+  const analysis = getAnalysisSync().filter(a => a.id !== id);
+  localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+};
+
+export const subscribeToAnalysis = (callback) => {
+  if (isFirebaseConfigured()) {
+    return onSnapshot(collection(db, COLLECTIONS.ANALYSIS), (snapshot) => {
+      const analysis = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
+      callback(analysis);
+    });
+  }
+  return () => { };
 };
 
 // ============ AUTH ============

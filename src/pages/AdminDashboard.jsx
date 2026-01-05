@@ -15,7 +15,8 @@ import {
 import {
     getProjects, getProjectsSync, addProject, updateProject, deleteProject, cleanData,
     getAchievements, getAchievementsSync, addAchievement, updateAchievement, deleteAchievement,
-    getHero, getHeroSync, updateHero, logout, convertToBase64, cleanupFirebaseDuplicates
+    getHero, getHeroSync, updateHero, logout, convertToBase64, cleanupFirebaseDuplicates,
+    getAnalysis, getAnalysisSync, addAnalysis, updateAnalysis, deleteAnalysis
 } from '../utils/dataStore';
 
 const AdminDashboard = () => {
@@ -23,6 +24,7 @@ const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('projects');
     const [projects, setProjects] = useState(getProjectsSync());
     const [achievements, setAchievements] = useState(getAchievementsSync());
+    const [analysis, setAnalysis] = useState(getAnalysisSync());
     const [hero, setHero] = useState(getHeroSync());
     const [editingItem, setEditingItem] = useState(null);
     const [showForm, setShowForm] = useState(false);
@@ -33,13 +35,15 @@ const AdminDashboard = () => {
     }, []);
 
     const loadData = async () => {
-        const [p, a, h] = await Promise.all([
+        const [p, a, an, h] = await Promise.all([
             getProjects(),
             getAchievements(),
+            getAnalysis(),
             getHero()
         ]);
         setProjects(p);
         setAchievements(a);
+        setAnalysis(an);
         setHero(h);
     };
 
@@ -108,6 +112,32 @@ const AdminDashboard = () => {
         }
     };
 
+    // Analysis handlers
+    const handleSaveAnalysis = async () => {
+        if (editingItem) {
+            await updateAnalysis(editingItem.id, formData);
+        } else {
+            await addAnalysis(formData);
+        }
+        await loadData();
+        resetForm();
+    };
+
+    const handleDeleteAnalysis = async (id) => {
+        const confirmDelete = window.confirm('Are you sure you want to delete this analysis card?');
+        if (confirmDelete) {
+            try {
+                await deleteAnalysis(id);
+                // Refresh the analysis list immediately using sync getter
+                const updatedAnalysis = getAnalysisSync();
+                setAnalysis(updatedAnalysis);
+            } catch (error) {
+                console.error('Error deleting analysis:', error);
+                alert('Failed to delete analysis');
+            }
+        }
+    };
+
     // Hero handlers
     const handleSaveHero = async () => {
         await updateHero(formData);
@@ -137,6 +167,7 @@ const AdminDashboard = () => {
     const tabs = [
         { id: 'projects', label: 'Projects', icon: FiGrid },
         { id: 'achievements', label: 'Achievements', icon: FiAward },
+        { id: 'analysis', label: 'Analysis', icon: FiGrid },
         { id: 'hero', label: 'Hero Settings', icon: FiImage }
     ];
 
@@ -514,6 +545,155 @@ const AdminDashboard = () => {
                     </motion.div>
                 )}
 
+                {activeTab === 'analysis' && (
+                    <motion.div
+                        key="analysis"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                    >
+                        {!showForm && (
+                            <motion.button
+                                onClick={startAdd}
+                                className="btn btn-primary"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                style={{ marginBottom: 'var(--spacing-lg)', display: 'flex', alignItems: 'center', gap: '8px' }}
+                            >
+                                <FiPlus />
+                                Add New Analysis Card
+                            </motion.button>
+                        )}
+
+                        {showForm && (
+                            <motion.div
+                                className="admin-form"
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                            >
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--spacing-lg)' }}>
+                                    <h3 style={{ fontSize: 'var(--text-xl)', fontWeight: 600 }}>
+                                        {editingItem ? 'Edit Analysis Card' : 'Add New Analysis Card'}
+                                    </h3>
+                                    <motion.button
+                                        onClick={resetForm}
+                                        whileHover={{ scale: 1.1 }}
+                                        style={{ color: 'var(--text-muted)' }}
+                                    >
+                                        <FiX size={24} />
+                                    </motion.button>
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Title *</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.title || ''}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                                        placeholder="e.g. Codeforces Solved"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Value *</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.value || ''}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, value: e.target.value }))}
+                                        placeholder="e.g. 696"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Icon (Emoji)</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.icon || ''}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, icon: e.target.value }))}
+                                        placeholder="📊"
+                                        style={{ maxWidth: '100px' }}
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Image (Logo - Optional)</label>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        style={{ marginBottom: 'var(--spacing-sm)' }}
+                                    />
+                                    {formData.image && (
+                                        <img src={formData.image} alt="Preview" style={{ maxWidth: '100px', borderRadius: '50%', marginTop: 'var(--spacing-sm)' }} />
+                                    )}
+                                </div>
+
+                                <motion.button
+                                    onClick={handleSaveAnalysis}
+                                    className="btn btn-primary"
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                                >
+                                    <FiSave />
+                                    {editingItem ? 'Update Card' : 'Save Card'}
+                                </motion.button>
+                            </motion.div>
+                        )}
+
+                        <div className="admin-grid">
+                            {analysis.map((item) => (
+                                <motion.div
+                                    key={item.id}
+                                    className="admin-card"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    whileHover={{ y: -4 }}
+                                >
+                                    <div className="admin-card-content">
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', marginBottom: 'var(--spacing-sm)' }}>
+                                            {item.image ? (
+                                                <img src={item.image} alt={item.title} style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} />
+                                            ) : (
+                                                <span style={{ fontSize: '2rem' }}>{item.icon || '📊'}</span>
+                                            )}
+                                            <div>
+                                                <h4 style={{ fontWeight: 600 }}>{item.title}</h4>
+                                                <span style={{ color: 'var(--accent-primary)', fontSize: 'var(--text-lg)', fontWeight: 'bold' }}>{item.value}</span>
+                                            </div>
+                                        </div>
+
+                                        <div className="admin-card-actions">
+                                            <motion.button
+                                                onClick={() => startEdit(item)}
+                                                className="btn-edit"
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                            >
+                                                <FiEdit2 style={{ marginRight: '4px' }} />
+                                                Edit
+                                            </motion.button>
+                                            <motion.button
+                                                onClick={() => handleDeleteAnalysis(item.id)}
+                                                className="btn-delete"
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                            >
+                                                <FiTrash2 style={{ marginRight: '4px' }} />
+                                                Delete
+                                            </motion.button>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+
                 {activeTab === 'hero' && (
                     <motion.div
                         key="hero"
@@ -615,7 +795,7 @@ const AdminDashboard = () => {
                                         if (window.confirm('Are you sure? This will permanently delete duplicate entries.')) {
                                             try {
                                                 const result = await cleanupFirebaseDuplicates();
-                                                alert(`Cleanup complete!\nRemoved ${result.projects} duplicate projects and ${result.achievements} duplicate achievements.`);
+                                                alert(`Cleanup complete!\nRemoved ${result.projects} duplicate projects, ${result.achievements} duplicate achievements and analysis duplicates.`);
                                                 await loadData();
                                             } catch (error) {
                                                 alert('Cleanup failed. Check console for details.');

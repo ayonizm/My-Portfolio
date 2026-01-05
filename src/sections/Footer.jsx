@@ -155,14 +155,14 @@ const Footer = () => {
                                 margin: '0 0 var(--spacing-md)'
                             }}
                         >
-                            Ayon Chowdhury
+                            MD.Fahim Ahmed
                         </motion.h3>
                         <p style={{
                             color: 'var(--text-muted)',
                             lineHeight: 1.6,
                             maxWidth: '300px'
                         }}>
-                            Competitive Programmer | Curious About Neural Networks
+                            BBA Student at NSU | EdTech Academic Coordinator at Ed-Ed | Creative Designer | Public Speaker | Athlete |
                         </p>
                     </div>
 
