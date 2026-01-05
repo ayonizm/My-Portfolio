@@ -41,6 +41,17 @@ const isFirebaseConfigured = () => {
 };
 
 // Default data with unique IDs
+const dispatchLocalChange = (key, data) => {
+  try {
+    const event = new CustomEvent('local-data-change', {
+      detail: { key, data }
+    });
+    window.dispatchEvent(event);
+  } catch (err) {
+    console.error('Error dispatching local event:', err);
+  }
+};
+
 const defaultProjects = [
   {
     id: 'proj_1001',
@@ -456,7 +467,11 @@ export const addAnalysis = async (item) => {
   const analysis = getAnalysisSync();
   analysis.push(newItem);
   localStorage.setItem(KEYS.ANALYSIS, JSON.stringify(analysis));
-  dispatchLocalChange(KEYS.ANALYSIS, analysis);
+  try {
+    dispatchLocalChange(KEYS.ANALYSIS, analysis);
+  } catch (e) {
+    console.error("Dispatch error", e);
+  }
 
   return newItem;
 };
@@ -527,13 +542,7 @@ export const convertToBase64 = (file) => {
   });
 };
 
-// Helper to dispatch local change events
-const dispatchLocalChange = (key, data) => {
-  const event = new CustomEvent('local-data-change', {
-    detail: { key, data }
-  });
-  window.dispatchEvent(event);
-};
+
 
 // Subscribe to real-time updates (Firebase + LocalStorage support)
 export const subscribeToProjects = (callback) => {
