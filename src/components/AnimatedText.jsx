@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 // Animated text that reveals character by character
 export const AnimatedText = ({ text, className = '', delay = 0 }) => {
@@ -51,26 +52,40 @@ export const AnimatedText = ({ text, className = '', delay = 0 }) => {
 
 // Typewriter effect
 export const TypewriterText = ({ text, className = '', speed = 50, delay = 0 }) => {
+    const [displayedText, setDisplayedText] = useState('');
+    const [started, setStarted] = useState(false);
+
+    useEffect(() => {
+        const startTimeout = setTimeout(() => {
+            setStarted(true);
+        }, delay * 1000);
+
+        return () => clearTimeout(startTimeout);
+    }, [delay]);
+
+    useEffect(() => {
+        if (!started) return;
+
+        let currentIndex = 0;
+        const interval = setInterval(() => {
+            if (currentIndex <= text.length) {
+                setDisplayedText(text.slice(0, currentIndex));
+                currentIndex++;
+            } else {
+                clearInterval(interval);
+            }
+        }, speed);
+
+        return () => clearInterval(interval);
+    }, [text, speed, started]);
+
     return (
         <motion.span
             className={className}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay }}
         >
-            {text.split('').map((char, index) => (
-                <motion.span
-                    key={index}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{
-                        delay: delay + (index * speed) / 1000,
-                        duration: 0.01
-                    }}
-                >
-                    {char}
-                </motion.span>
-            ))}
+            {displayedText}
             <motion.span
                 className="cursor-blink"
                 animate={{ opacity: [1, 0] }}
@@ -84,8 +99,8 @@ export const TypewriterText = ({ text, className = '', speed = 50, delay = 0 }) 
                     width: '2px',
                     height: '1em',
                     background: 'var(--accent-primary)',
-                    marginLeft: '4px',
-                    verticalAlign: 'middle'
+                    marginLeft: '2px',
+                    verticalAlign: 'text-bottom'
                 }}
             />
         </motion.span>

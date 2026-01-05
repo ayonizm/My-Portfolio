@@ -1,11 +1,108 @@
-import { motion, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { FiArrowDown } from 'react-icons/fi';
-import { TypewriterText, GradientText } from '../components/AnimatedText';
-import { getHeroSync, getHero } from '../utils/dataStore';
-import { useEffect, useState } from 'react';
-import React from 'react';
+import adamLogo from '../assets/adam.svg';
+import nsuLogo from '../assets/NSU.svg';
 
+// ... (previous imports)
 
+// Floating 3D Logo Component
+const FloatingLogo = ({ src, alt, delay = 0, xOffset = 0, yOffset = 0, size = 60 }) => {
+    const x = useMotionValue(0);
+    const y = useMotionValue(0);
+    const rotateX = useTransform(y, [-50, 50], [15, -15]);
+    const rotateY = useTransform(x, [-50, 50], [-15, 15]);
+
+    const handleMouseMove = (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        x.set(e.clientX - centerX);
+        y.set(e.clientY - centerY);
+    };
+
+    const handleMouseLeave = () => {
+        x.set(0);
+        y.set(0);
+    };
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{
+                opacity: 1,
+                scale: 1,
+                y: [0, -15, 0] // Floating animation
+            }}
+            transition={{
+                opacity: { duration: 0.5, delay },
+                scale: { duration: 0.5, delay },
+                y: { duration: 3, repeat: Infinity, ease: "easeInOut", delay: delay * 2 }
+            }}
+            style={{
+                position: 'absolute',
+                left: xOffset,
+                top: yOffset,
+                perspective: 500,
+                zIndex: 10
+            }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+        >
+            <motion.div
+                style={{
+                    width: size,
+                    height: size,
+                    rotateX,
+                    rotateY,
+                    cursor: 'pointer',
+                    filter: "drop-shadow(0 0 10px rgba(255, 255, 255, 0.3))", // Soft glow
+                }}
+            >
+                <div style={{
+                    width: '100%',
+                    height: '100%',
+                    position: 'relative',
+                    transformStyle: 'preserve-3d',
+                }}>
+                    <img
+                        src={src}
+                        alt={alt}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'contain'
+                        }}
+                    />
+
+                    {/* Glitter/Shine Effect */}
+                    <motion.div
+                        animate={{
+                            opacity: [0, 0.5, 0],
+                            left: ['-50%', '150%']
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: Math.random() * 2
+                        }}
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            width: '50%',
+                            height: '100%',
+                            background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)',
+                            transform: 'skewX(-25deg)',
+                            pointerEvents: 'none'
+                        }}
+                    />
+                </div>
+            </motion.div>
+        </motion.div>
+    );
+};
+
+// ... (FloatingLogo definition ends)
+
+// ... (No hanging JSX here) 
 
 const getRankColor = (rating) => {
     if (rating < 1200) return '#CCCCCC'; // Newbie - Gray
@@ -190,7 +287,8 @@ const Hero = () => {
                             style={{
                                 display: 'flex',
                                 gap: 'var(--spacing-md)',
-                                alignItems: 'center'
+                                alignItems: 'center',
+                                position: 'relative' // Needed for absolute positioning context
                             }}
                         >
                             <motion.a
@@ -209,6 +307,22 @@ const Hero = () => {
                             >
                                 Contact Me
                             </motion.a>
+
+                            {/* Floating Logos */}
+                            <FloatingLogo
+                                src={nsuLogo}
+                                alt="NSU"
+                                delay={0.5}
+                                xOffset="0px"
+                                yOffset="80px"
+                            />
+                            <FloatingLogo
+                                src={adamLogo}
+                                alt="Adam"
+                                delay={0.8}
+                                xOffset="100px"
+                                yOffset="80px"
+                            />
                         </motion.div>
 
                     </div>
