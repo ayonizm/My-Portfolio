@@ -301,17 +301,17 @@ const Hero = () => {
                                 src={nsuLogo}
                                 alt="NSU"
                                 delay={0.5}
-                                xOffset={isMobile ? "-45px" : "-40px"}
+                                xOffset={isMobile ? "-35px" : "-40px"}
                                 yOffset={isMobile ? "110px" : "70px"}
-                                size={isMobile ? 80 : 150}
+                                size={isMobile ? 100 : 150}
                             />
                             <FloatingLogo
                                 src={adamLogo}
                                 alt="Adam"
                                 delay={0.8}
                                 xOffset={isMobile ? "45px" : "140px"}
-                                yOffset={isMobile ? "110px" : "90px"}
-                                size={isMobile ? 80 : 90}
+                                yOffset={isMobile ? "120px" : "90px"}
+                                size={isMobile ? 60 : 90}
                             />
                         </motion.div>
 
