@@ -102,6 +102,14 @@ const Hero = () => {
     const [hero, setHero] = useState(getHeroSync());
     const [scrollY, setScrollY] = useState(0);
     const [cfRating, setCfRating] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth < 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     useEffect(() => {
         // Fetch Codeforces Rating
@@ -293,17 +301,17 @@ const Hero = () => {
                                 src={nsuLogo}
                                 alt="NSU"
                                 delay={0.5}
-                                xOffset="-40px"
-                                yOffset="70px"
-                                size={150}
+                                xOffset={isMobile ? "-45px" : "-40px"}
+                                yOffset={isMobile ? "110px" : "70px"}
+                                size={isMobile ? 80 : 150}
                             />
                             <FloatingLogo
                                 src={adamLogo}
                                 alt="Adam"
                                 delay={0.8}
-                                xOffset="140px"
-                                yOffset="90px"
-                                size={90}
+                                xOffset={isMobile ? "45px" : "140px"}
+                                yOffset={isMobile ? "110px" : "90px"}
+                                size={isMobile ? 80 : 90}
                             />
                         </motion.div>
 
