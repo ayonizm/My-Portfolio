@@ -631,13 +631,24 @@ const AdminDashboard = () => {
                                 </div>
 
                                 <div className="form-group">
-                                    <label className="form-label">Title *</label>
+                                    <label className="form-label">Company Name *</label>
                                     <input
                                         type="text"
                                         className="form-input"
                                         value={formData.title || ''}
                                         onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                                         placeholder="e.g. Google"
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label">Role / Job Title *</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        value={formData.jobTitle || ''}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
+                                        placeholder="e.g. Senior Software Engineer"
                                     />
                                 </div>
 
