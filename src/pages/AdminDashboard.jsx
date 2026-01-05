@@ -29,6 +29,7 @@ const AdminDashboard = () => {
     const [editingItem, setEditingItem] = useState(null);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({});
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         loadData();
@@ -112,7 +113,7 @@ const AdminDashboard = () => {
         }
     };
 
-    // Analysis handlers
+
     const handleSaveAnalysis = async () => {
         // Validation: Check for Title and Value (Job Duration)
         if (!formData.title || !formData.value) {
@@ -120,14 +121,24 @@ const AdminDashboard = () => {
             return;
         }
 
-        if (editingItem) {
-            await updateAnalysis(editingItem.id, formData);
-        } else {
-            await addAnalysis(formData);
+        setLoading(true);
+        try {
+            if (editingItem) {
+                await updateAnalysis(editingItem.id, formData);
+            } else {
+                await addAnalysis(formData);
+            }
+            await loadData();
+            resetForm();
+        } catch (error) {
+            console.error('Error saving:', error);
+            alert('Failed to save. Please try again.');
+        } finally {
+            setLoading(false);
         }
-        await loadData();
-        resetForm();
     };
+
+
 
     const handleDeleteAnalysis = async (id) => {
         const confirmDelete = window.confirm('Are you sure you want to delete this analysis card?');
@@ -631,10 +642,11 @@ const AdminDashboard = () => {
                                     className="btn btn-primary"
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.98 }}
-                                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                                    disabled={loading}
+                                    style={{ display: 'flex', alignItems: 'center', gap: '8px', opacity: loading ? 0.7 : 1 }}
                                 >
                                     <FiSave />
-                                    {editingItem ? 'Update Card' : 'Save Card'}
+                                    {loading ? 'Saving...' : (editingItem ? 'Update Card' : 'Save Card')}
                                 </motion.button>
                             </motion.div>
                         )}

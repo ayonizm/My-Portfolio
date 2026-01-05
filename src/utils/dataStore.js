@@ -545,14 +545,26 @@ export const subscribeToProjects = (callback) => {
     });
   }
 
-  // Local storage listener
-  const handler = (e) => {
+  // Local storage listener (Same tab)
+  const localHandler = (e) => {
     if (e.detail && e.detail.key === KEYS.PROJECTS) {
       callback(e.detail.data);
     }
   };
-  window.addEventListener('local-data-change', handler);
-  return () => window.removeEventListener('local-data-change', handler);
+  window.addEventListener('local-data-change', localHandler);
+
+  // Storage event listener (Cross tab)
+  const storageHandler = (e) => {
+    if (e.key === KEYS.PROJECTS && e.newValue) {
+      callback(JSON.parse(e.newValue));
+    }
+  };
+  window.addEventListener('storage', storageHandler);
+
+  return () => {
+    window.removeEventListener('local-data-change', localHandler);
+    window.removeEventListener('storage', storageHandler);
+  };
 };
 
 export const subscribeToAchievements = (callback) => {
@@ -564,13 +576,24 @@ export const subscribeToAchievements = (callback) => {
     });
   }
 
-  const handler = (e) => {
+  const localHandler = (e) => {
     if (e.detail && e.detail.key === KEYS.ACHIEVEMENTS) {
       callback(e.detail.data);
     }
   };
-  window.addEventListener('local-data-change', handler);
-  return () => window.removeEventListener('local-data-change', handler);
+  window.addEventListener('local-data-change', localHandler);
+
+  const storageHandler = (e) => {
+    if (e.key === KEYS.ACHIEVEMENTS && e.newValue) {
+      callback(JSON.parse(e.newValue));
+    }
+  };
+  window.addEventListener('storage', storageHandler);
+
+  return () => {
+    window.removeEventListener('local-data-change', localHandler);
+    window.removeEventListener('storage', storageHandler);
+  };
 };
 
 export const subscribeToAnalysis = (callback) => {
@@ -582,13 +605,24 @@ export const subscribeToAnalysis = (callback) => {
     });
   }
 
-  const handler = (e) => {
+  const localHandler = (e) => {
     if (e.detail && e.detail.key === KEYS.ANALYSIS) {
       callback(e.detail.data);
     }
   };
-  window.addEventListener('local-data-change', handler);
-  return () => window.removeEventListener('local-data-change', handler);
+  window.addEventListener('local-data-change', localHandler);
+
+  const storageHandler = (e) => {
+    if (e.key === KEYS.ANALYSIS && e.newValue) {
+      callback(JSON.parse(e.newValue));
+    }
+  };
+  window.addEventListener('storage', storageHandler);
+
+  return () => {
+    window.removeEventListener('local-data-change', localHandler);
+    window.removeEventListener('storage', storageHandler);
+  };
 };
 
 // Cleanup duplicate data in Firebase (same content, different IDs)
