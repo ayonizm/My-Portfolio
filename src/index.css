@@ -604,3 +604,5 @@ button {
   margin-bottom: var(--spacing-md);
   text-align: center;
 }
+/* Native cursor for inputs */
+input, textarea, select { cursor: text !important; }

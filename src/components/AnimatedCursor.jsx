@@ -57,7 +57,8 @@ const AnimatedCursor = () => {
                     x: position.x - 6,
                     y: position.y - 6,
                     scale: isClicking ? 0.8 : 1,
-                    opacity: isHidden ? 0 : 1
+                    scale: isClicking ? 0.8 : 1,
+                    opacity: isHidden || (typeof document !== 'undefined' && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.elementFromPoint(position.x, position.y)?.tagName)) ? 0 : 1
                 }}
                 transition={{
                     type: 'spring',
@@ -86,7 +87,7 @@ const AnimatedCursor = () => {
                     x: position.x - 24,
                     y: position.y - 24,
                     scale: isPointer ? 1.5 : isClicking ? 0.9 : 1,
-                    opacity: isHidden ? 0 : 0.5
+                    opacity: isHidden || (typeof document !== 'undefined' && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.elementFromPoint(position.x, position.y)?.tagName)) ? 0 : 0.5
                 }}
                 transition={{
                     type: 'spring',
